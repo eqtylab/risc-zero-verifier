@@ -2,10 +2,13 @@
 
 default: all
 
-all: wasm
+all: wasm web
 
 wasm:
 	$(MAKE) -C wasm
+
+web:
+	$(MAKE) -C web
 
 clean:
 	$(MAKE) -C wasm clean
