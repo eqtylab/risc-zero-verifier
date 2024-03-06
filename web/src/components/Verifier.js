@@ -1,7 +1,21 @@
 import React, { useState } from 'react';
+import * as verifier from "@eqtylab/risc-zero-verifier";
 
-function verifyRiscZeroReceipt(guestCodeId, receipt) {
-  return "verified";
+async function verifyRiscZeroReceipt(guestCodeId, receipt) {
+  if (!guestCodeId || !receipt) {
+    return "Invalid input";
+  }
+  
+  try {
+    let result = await verifier.verify_risc_zero_receipt(guestCodeId, receipt);
+    if (result.verified === true) {
+      return "verified";
+    } else {
+      return "not verified: ", result.error;
+    }
+  } catch (error) {
+    return "Error: " + error;
+  }
 }
 
 function Verifier() {
@@ -16,9 +30,7 @@ function Verifier() {
       reader.onload = (e) => {
         const arrayBuffer = e.target.result;
         const byteArray = new Uint8Array(arrayBuffer);
-        const binaryString = byteArray.reduce((acc, byte) => acc + String.fromCharCode(byte), '');
-        setReceipt(binaryString);
-        verifyRiscZeroReceipt();
+        setReceipt(byteArray);
       };
       reader.readAsArrayBuffer(file);
     }
@@ -33,11 +45,11 @@ function Verifier() {
       <div>
         <p>Receipt (bincode format binary file):</p>
         <input type="file" id="risc0ReceiptInput" onChange={handleFileChange} />
-        <pre>{receipt}</pre>
+        {/* <pre>{receipt}</pre> */}
         <div id="receiptVerificationResult">{verificationResult}</div>
       </div>
       <div>
-          <button id="verifyButton" onClick={() => setVerificationResult(verifyRiscZeroReceipt(guestCodeId, receipt))}>Verify</button>
+          <button id="verifyButton" onClick={async () => setVerificationResult(await verifyRiscZeroReceipt(guestCodeId, receipt))}>Verify</button>
       </div>
     </div>
   );
