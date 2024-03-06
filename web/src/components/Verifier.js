@@ -22,6 +22,8 @@ async function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
   }
 }
 
+
+
 function Verifier() {
   const [guestCodeId, setGuestCodeId] = useState('');
   const [receiptJson, setReceiptJson] = useState('');
@@ -29,18 +31,34 @@ function Verifier() {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+
     if (file) {
       const reader = new FileReader();
       reader.onload = async (e) => {
-        const arrayBuffer = e.target.result;
-        const byteArray = new Uint8Array(arrayBuffer);
-        const receiptJson = await verifier.convert_binary_receipt_to_json(byteArray);
-        setReceiptJson(receiptJson);
-        console.log("Receipt: ", byteArray);
-        console.log("Receipt JSON: ", receiptJson);
+        const text = e.target.result;
 
+        // Try parsing as JSON
+        let receiptJson;
+        try {
+          receiptJson = JSON.parse(text);
+          setReceiptJson(JSON.stringify(receiptJson, null, 2));
+          console.log("Receipt JSON: ", receiptJson);
+        } catch (error) {
+          // Try to convert from binary, expecting bincode format, if JSON parsing fails
+          const fallbackReader = new FileReader();
+          fallbackReader.onload = async (e) => {
+            const arrayBuffer = e.target.result;
+            const byteArray = new Uint8Array(arrayBuffer);
+            receiptJson = await verifier.convert_binary_receipt_to_json(byteArray);
+            setReceiptJson(receiptJson);
+            console.log("Receipt: ", byteArray);
+            console.log("Receipt JSON: ", receiptJson);
+          };
+          fallbackReader.readAsArrayBuffer(file);
+        }
       };
-      reader.readAsArrayBuffer(file);
+
+      reader.readAsText(file);
     }
   };
 
