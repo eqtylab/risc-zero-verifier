@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import * as verifier from "@eqtylab/risc-zero-verifier";
 
-async function verifyRiscZeroReceipt(guestCodeId, receipt) {
-  if (!guestCodeId || !receipt) {
-    return "Invalid input";
+async function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
+  if (!guestCodeId) {
+    return "Please enter a guest code id.";
+  }
+  
+  if (!receiptJson) {
+    return "Please provide a receipt file.";
   }
   
   try {
-    let result = await verifier.verify_risc_zero_receipt(guestCodeId, receipt);
+    let result = await verifier.verify_json_receipt(guestCodeId, receiptJson);
     if (result.verified === true) {
       return "verified";
     } else {
@@ -20,17 +24,21 @@ async function verifyRiscZeroReceipt(guestCodeId, receipt) {
 
 function Verifier() {
   const [guestCodeId, setGuestCodeId] = useState('');
-  const [receipt, setReceipt] = useState(null);
-  const [verificationResult, setVerificationResult] = useState('Waiting to verify...');
+  const [receiptJson, setReceiptJson] = useState('');
+  const [verificationResult, setVerificationResult] = useState('');
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         const arrayBuffer = e.target.result;
         const byteArray = new Uint8Array(arrayBuffer);
-        setReceipt(byteArray);
+        const receiptJson = await verifier.convert_binary_receipt_to_json(byteArray);
+        setReceiptJson(receiptJson);
+        console.log("Receipt: ", byteArray);
+        console.log("Receipt JSON: ", receiptJson);
+
       };
       reader.readAsArrayBuffer(file);
     }
@@ -43,13 +51,15 @@ function Verifier() {
         <input type="text" id="risc0GuestCodeId" value={guestCodeId} onChange={(e) => setGuestCodeId(e.target.value)} />
       </div>
       <div>
-        <p>Receipt (bincode format binary file):</p>
-        <input type="file" id="risc0ReceiptInput" onChange={handleFileChange} />
-        {/* <pre>{receipt}</pre> */}
-        <div id="receiptVerificationResult">{verificationResult}</div>
+        <p>Receipt (bincode format binary file or JSON):</p>
+        <div>
+          <input type="file" id="risc0ReceiptInput" onChange={handleFileChange} />
+        </div>
+        <textarea value={receiptJson} onChange={(event) => {setReceiptJson(event.target.value);}}/>
       </div>
       <div>
-          <button id="verifyButton" onClick={async () => setVerificationResult(await verifyRiscZeroReceipt(guestCodeId, receipt))}>Verify</button>
+        <button id="verifyButton" onClick={async () => setVerificationResult(await verifyRiscZeroReceipt(guestCodeId, receiptJson))}>Verify</button>
+        <div id="receiptVerificationResult">{verificationResult}</div>
       </div>
     </div>
   );

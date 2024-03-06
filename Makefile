@@ -1,14 +1,13 @@
-.PHONY: all wasm clean
+.PHONY: all web wasm clean
 
-default: all
+all: web wasm
 
-all: wasm web
+web: wasm
+	$(MAKE) -C web build
 
 wasm:
-	$(MAKE) -C wasm
-
-web:
-	$(MAKE) -C web
+	$(MAKE) -C wasm build
 
 clean:
 	$(MAKE) -C wasm clean
+	$(MAKE) -C web clean
