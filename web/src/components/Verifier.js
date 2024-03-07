@@ -23,7 +23,6 @@ async function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
 }
 
 
-
 function Verifier() {
   const [guestCodeId, setGuestCodeId] = useState('');
   const [receiptJson, setReceiptJson] = useState('');
@@ -65,20 +64,24 @@ function Verifier() {
   return (
     <div id="Verifier">
       <div>
-        <p>Guest code id (hex value):</p>
+        <label for="risc0GuestCodeId">Guest code id (hex value):</label>
         <input type="text" id="risc0GuestCodeId" value={guestCodeId} onChange={(e) => setGuestCodeId(e.target.value)} />
       </div>
       <div>
-        <p>Receipt (bincode format binary file or JSON):</p>
+        <p>Upload a receipt file as JSON or binary (bincode format), or paste it as JSON into the form field.</p>
         <div>
-          <input type="file" id="risc0ReceiptInput" onChange={handleFileChange} />
+          <label for="risc0ReceiptFileInput">Receipt (bincode format binary file or JSON):</label> 
+          <input type="file" id="risc0ReceiptFileInput" onChange={handleFileChange} />
         </div>
-        <textarea value={receiptJson} onChange={(event) => {setReceiptJson(event.target.value);}}/>
+        <div>
+          <label for="risc0ReceiptJson">Receipt JSON:</label>
+          <textarea id="risc0ReceiptJson" value={receiptJson} onChange={(event) => {setReceiptJson(event.target.value);}}/>
+        </div>
       </div>
       <div>
         <button id="verifyButton" onClick={async () => setVerificationResult(await verifyRiscZeroReceipt(guestCodeId, receiptJson))}>Verify</button>
-        <div id="receiptVerificationResult">{verificationResult}</div>
       </div>
+      <div id="receiptVerificationResult">{verificationResult}</div>
     </div>
   );
 }
