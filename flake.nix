@@ -36,6 +36,7 @@
           rust
           wasm-bindgen-cli
         ] ++ (with pkgs; [
+          gnumake
           nodejs_20
           wasm-pack
           yarn
