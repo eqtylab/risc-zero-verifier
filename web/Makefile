@@ -2,8 +2,11 @@
 
 default: build
 
-build:
-	yarn install
+node_modules:
+	yarn install && touch $@
+
+build: node_modules
+	yarn build
 
 clean:
 	rm -rf ./node_modules
