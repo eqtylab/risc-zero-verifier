@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Verifier } from './components/Verifier';
+import { Verifier } from "@eqtylab/risc-zero-verifier-react";
 
 function App() {
   return (

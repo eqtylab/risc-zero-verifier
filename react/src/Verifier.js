@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import * as verifier from "@eqtylab/risc-zero-verifier";
+import React, { useEffect, useState } from 'react';
 
 const cssPrefix = "risc-zero-verifier";
 
@@ -22,6 +21,16 @@ const defaultText = {
 }
 
 function Verifier({text = defaultText, instanceNumber = 0}) {
+  const [verifier, setVerifier] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const wasmPackage = await import("@eqtylab/risc-zero-verifier");
+      const verifier = await wasmPackage.default
+      setVerifier(verifier);
+    })();
+  }, []);
+
   const [guestCodeId, setGuestCodeId] = useState('');
   const [_, setReceiptBinary] = useState('');
   const [receiptJson, setReceiptJson] = useState('');
@@ -91,28 +100,28 @@ function Verifier({text = defaultText, instanceNumber = 0}) {
   }
 
   return (
-    <div class={cssClass("main")}>
-      <div class={cssClass("guest-code-id-container")}>
+    <div className={cssClass("main")}>
+      <div className={cssClass("guest-code-id-container")}>
         <label htmlFor={cssId("guest-code-input")}>{text.fieldLabels.guestCodeId}</label>
         <input type="text" id={cssId("guest-code-input")} value={guestCodeId} onChange={(e) => setGuestCodeId(e.target.value)} />
       </div>
-      <div class={cssClass("receipt-input-container")}>
+      <div className={cssClass("receipt-input-container")}>
         <p>{text.instructions}</p>
-        <div class={cssClass("receipt-file-input-container")}>
+        <div className={cssClass("receipt-file-input-container")}>
           <label htmlFor={cssId("receipt-file-input")}>{text.fieldLabels.receiptFile}</label> 
           <input type="file" id={cssId("receipt-file-input")} onChange={handleFileChange} />
         </div>
-        <div class={cssClass("receipt-json-input-container")}>
+        <div className={cssClass("receipt-json-input-container")}>
           <label htmlFor={cssId("(receipt-json-input")}>{text.fieldLabels.receiptJson}</label>
           <textarea id={cssId("(receipt-json-input")} value={receiptJson} onChange={(event) => {setReceiptJson(event.target.value);}}/>
         </div>
       </div>
-      <div class={cssClass("verify-button-container")}>
+      <div className={cssClass("verify-button-container")}>
         <button id={cssId("verify-button")} onClick={async () => setVerificationResult(await verifyRiscZeroReceipt(guestCodeId, receiptJson))}>{text.verifyButtonLabel}</button>
       </div>
-      <div class={cssClass("receipt-verification-result")}>{verificationResult}</div>
+      <div className={cssClass("receipt-verification-result")}>{verificationResult}</div>
     </div>
   );
 }
 
-export { Verifier, defaultText };
+export default Verifier;

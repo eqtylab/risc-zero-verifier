@@ -6,4 +6,4 @@ build:
 	wasm-pack build --scope eqtylab --target bundler
 
 clean:
-	rm -rf ./pkg
+	rm -rf ./pkg ./target
