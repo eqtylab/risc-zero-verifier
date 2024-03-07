@@ -12,4 +12,4 @@ start: build
 	yarn start
 
 clean:
-	rm -rf ./node_modules
+	rm -rf ./node_modules ./dist

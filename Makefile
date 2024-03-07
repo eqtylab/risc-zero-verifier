@@ -15,6 +15,7 @@ start-web: web
 	$(MAKE) -C web start
 
 clean:
+	rm -rf ./node_modules ./target
 	$(MAKE) -C react clean
 	$(MAKE) -C wasm clean
 	$(MAKE) -C web clean
