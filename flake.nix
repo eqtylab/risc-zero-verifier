@@ -36,7 +36,9 @@
           rust
           wasm-bindgen-cli
         ] ++ (with pkgs; [
+          nodejs_20
           wasm-pack
+          yarn
         ]);
 
       in
