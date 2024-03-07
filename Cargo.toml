@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "wasm",
+]
+resolver = "2"

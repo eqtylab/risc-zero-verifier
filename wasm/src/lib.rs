@@ -47,14 +47,18 @@ pub async fn verify_receipt_json(
         guest_code_id_hex_string
     )));
 
-    let receipt: Receipt = serde_json::from_str::<Receipt>(receipt_json)
-        .map_err(|e| JsValue::from_str(&format!("Error deserializing JSON-formatted receipt: {}", e)))?;
+    let receipt: Receipt = serde_json::from_str::<Receipt>(receipt_json).map_err(|e| {
+        JsValue::from_str(&format!(
+            "Error deserializing JSON-formatted receipt: {}",
+            e
+        ))
+    })?;
 
     verify_receipt(guest_code_id_hex_string, receipt).await
 }
 
 #[wasm_bindgen]
-pub async fn verify_receipt_binary (
+pub async fn verify_receipt_binary(
     guest_code_id_hex_string: &str,
     receipt_binary: Vec<u8>,
 ) -> Result<JsValue, JsValue> {
@@ -65,13 +69,20 @@ pub async fn verify_receipt_binary (
         guest_code_id_hex_string
     )));
 
-    let receipt: Receipt = bincode::deserialize(&receipt_binary)
-        .map_err(|e| JsValue::from_str(&format!("Error deserializing bincode-formatted receipt: {}", e)))?;
+    let receipt: Receipt = bincode::deserialize(&receipt_binary).map_err(|e| {
+        JsValue::from_str(&format!(
+            "Error deserializing bincode-formatted receipt: {}",
+            e
+        ))
+    })?;
 
     verify_receipt(guest_code_id_hex_string, receipt).await
 }
 
-async fn verify_receipt(guest_code_id_hex_string: &str, receipt: Receipt) -> Result<JsValue, JsValue> {
+async fn verify_receipt(
+    guest_code_id_hex_string: &str,
+    receipt: Receipt,
+) -> Result<JsValue, JsValue> {
     console_error_panic_hook::set_once();
 
     let mut result = ReceiptVerificationResult {
