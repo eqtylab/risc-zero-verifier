@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import * as verifier from "@eqtylab/risc-zero-verifier";
+import React, { useEffect, useState } from 'react';
 
 const cssPrefix = "risc-zero-verifier";
 
@@ -22,6 +21,16 @@ const defaultText = {
 }
 
 function Verifier({text = defaultText, instanceNumber = 0}) {
+  const [verifier, setVerifier] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const wasmPackage = await import("@eqtylab/risc-zero-verifier");
+      const verifier = await wasmPackage.default
+      setVerifier(verifier);
+    })();
+  }, []);
+
   const [guestCodeId, setGuestCodeId] = useState('');
   const [_, setReceiptBinary] = useState('');
   const [receiptJson, setReceiptJson] = useState('');
