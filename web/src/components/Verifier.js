@@ -11,7 +11,7 @@ async function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
   }
   
   try {
-    let result = await verifier.verify_json_receipt(guestCodeId, receiptJson);
+    let result = await verifier.verify_receipt_json(guestCodeId, receiptJson);
     if (result.verified === true) {
       return "verified";
     } else {
@@ -25,6 +25,7 @@ async function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
 
 function Verifier() {
   const [guestCodeId, setGuestCodeId] = useState('');
+  const [receiptBinary, setReceiptBinary] = useState('');
   const [receiptJson, setReceiptJson] = useState('');
   const [verificationResult, setVerificationResult] = useState('');
 
@@ -48,7 +49,8 @@ function Verifier() {
           fallbackReader.onload = async (e) => {
             const arrayBuffer = e.target.result;
             const byteArray = new Uint8Array(arrayBuffer);
-            receiptJson = await verifier.convert_binary_receipt_to_json(byteArray);
+            receiptJson = await verifier.binary_to_json(byteArray);
+            setReceiptBinary(byteArray);
             setReceiptJson(receiptJson);
             console.log("Receipt: ", byteArray);
             console.log("Receipt JSON: ", receiptJson);
