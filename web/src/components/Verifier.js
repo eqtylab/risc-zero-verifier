@@ -1,33 +1,46 @@
 import React, { useState } from 'react';
 import * as verifier from "@eqtylab/risc-zero-verifier";
 
-async function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
-  if (!guestCodeId) {
-    return "Please enter a guest code id.";
-  }
-  
-  if (!receiptJson) {
-    return "Please provide a receipt file.";
-  }
-  
-  try {
-    let result = await verifier.verify_receipt_json(guestCodeId, receiptJson);
-    if (result.verified === true) {
-      return "verified";
-    } else {
-      return "not verified: ", result.error;
-    }
-  } catch (error) {
-    return "Error: " + error;
+const defaultText = {
+  verifyButtonLabel: "Verify",
+  instructions: "Upload a receipt file as JSON or binary (bincode format), or paste it as JSON into the form field.",
+  fieldLabels: {
+    guestCodeId: "Guest code id (hex value):",
+    receiptFile: "Receipt (bincode format binary file or JSON):",
+    receiptJson: "Receipt JSON:"
+  },
+  errors: {
+    guestCodeIdMissing: "Please enter a guest code id.",
+    receiptJsonMissing: "Please provide a receipt file."
   }
 }
 
-
-function Verifier() {
+function Verifier({text = defaultText}) {
   const [guestCodeId, setGuestCodeId] = useState('');
   const [receiptBinary, setReceiptBinary] = useState('');
   const [receiptJson, setReceiptJson] = useState('');
   const [verificationResult, setVerificationResult] = useState('');
+
+  async function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
+    if (!guestCodeId) {
+      return text.errors.guestCodeIdMissing;
+    }
+    
+    if (!receiptJson) {
+      return text.errors.receiptJsonMissing;
+    }
+    
+    try {
+      let result = await verifier.verify_receipt_json(guestCodeId, receiptJson);
+      if (result.verified === true) {
+        return "verified";
+      } else {
+        return "not verified: ", result.error;
+      }
+    } catch (error) {
+      return "Error: " + error;
+    }
+  }
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -66,26 +79,26 @@ function Verifier() {
   return (
     <div id="Verifier">
       <div>
-        <label for="risc0GuestCodeId">Guest code id (hex value):</label>
+        <label htmlFor="risc0GuestCodeId">{text.fieldLabels.guestCodeId}</label>
         <input type="text" id="risc0GuestCodeId" value={guestCodeId} onChange={(e) => setGuestCodeId(e.target.value)} />
       </div>
       <div>
-        <p>Upload a receipt file as JSON or binary (bincode format), or paste it as JSON into the form field.</p>
+        <p>{text.instructions}</p>
         <div>
-          <label for="risc0ReceiptFileInput">Receipt (bincode format binary file or JSON):</label> 
+          <label htmlFor="risc0ReceiptFileInput">{text.fieldLabels.receiptFile}</label> 
           <input type="file" id="risc0ReceiptFileInput" onChange={handleFileChange} />
         </div>
         <div>
-          <label for="risc0ReceiptJson">Receipt JSON:</label>
+          <label htmlFor="risc0ReceiptJson">{text.fieldLabels.receiptJson}</label>
           <textarea id="risc0ReceiptJson" value={receiptJson} onChange={(event) => {setReceiptJson(event.target.value);}}/>
         </div>
       </div>
       <div>
-        <button id="verifyButton" onClick={async () => setVerificationResult(await verifyRiscZeroReceipt(guestCodeId, receiptJson))}>Verify</button>
+        <button id="verifyButton" onClick={async () => setVerificationResult(await verifyRiscZeroReceipt(guestCodeId, receiptJson))}>{text.verifyButtonLabel}</button>
       </div>
       <div id="receiptVerificationResult">{verificationResult}</div>
     </div>
   );
 }
 
-export default Verifier;
+export { Verifier, defaultText };
