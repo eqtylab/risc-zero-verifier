@@ -1,13 +1,17 @@
 .PHONY: all web wasm clean
 
-all: web wasm
+all: react web wasm
 
-web: wasm
-	$(MAKE) -C web build
+react: wasm
+	$(MAKE) -C wasm build
 
 wasm:
 	$(MAKE) -C wasm build
 
+web: react
+	$(MAKE) -C web build
+
 clean:
+	$(MAKE) -C react clean
 	$(MAKE) -C wasm clean
 	$(MAKE) -C web clean

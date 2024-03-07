@@ -1,0 +1,26 @@
+{
+  "name": "@eqtylab/risc-zero-verifier-react",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "babel src --out-dir dist",
+    "test": "jest"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-react": "^7.12.1",
+    "@eqtylab/risc-zero-verifier": "*",
+    "babel-loader": "^8.2.1",
+    "jest": "^26.6.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "webpack": "^5.3.2",
+    "webpack-cli": "^4.1.0",
+    "webpack-dev-server": "^3.11.0"
+  }
+}

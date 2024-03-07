@@ -2,7 +2,6 @@
   "name": "risc-zero-verifier",
   "version": "0.0.1",
   "main": "index.js",
-  "license": "MIT",
 
   "scripts": {
     "start": "webpack serve --mode development",
@@ -10,7 +9,7 @@
   },
 
   "dependencies": {
-    "@eqtylab/risc-zero-verifier": "*",
+    "@eqtylab/risc-zero-verifier-react": "*",
     "css-loader": "^6.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
