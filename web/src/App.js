@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { Verifier } from "@eqtylab/risc-zero-verifier-react";
 
 function App() {
   return (
     <div className="App">
-      <Verifier />
+      <Verifier
+        enableJournalParser={true}
+        ipfsGateway='https://ipfs.hypha.coop'
+      />
     </div>
   );
 }

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import JournalParser from './JournalParser.js';
 
 const cssPrefix = "risc-zero-verifier";
 
-const defaultText = {
+export const defaultText = {
   verifyButtonLabel: "Verify",
   instructions: "Upload a receipt file as JSON or binary (bincode format), or paste it as JSON into the form field.",
   fieldLabels: {
@@ -20,7 +21,12 @@ const defaultText = {
   }
 }
 
-function Verifier({text = defaultText, instanceNumber = 0}) {
+function Verifier({
+  text = defaultText,
+  instanceNumber = 0,
+  enableJournalParser = false,
+  ipfsGateway = "https://ipfs.io",
+}) {
   const [verifier, setVerifier] = useState(null);
 
   useEffect(() => {
@@ -35,6 +41,16 @@ function Verifier({text = defaultText, instanceNumber = 0}) {
   const [_, setReceiptBinary] = useState('');
   const [receiptJson, setReceiptJson] = useState('');
   const [verificationResult, setVerificationResult] = useState('');
+
+  const receiptJournalBytes = useMemo(() => {
+    try {
+      const journal = JSON.parse(receiptJson).journal;
+      const journalBytes = new Uint8Array(journal.bytes);
+      return journalBytes;
+    } catch {
+      return null;
+    }
+  }, [receiptJson]);
 
   async function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
     if (!guestCodeId) {
@@ -120,6 +136,19 @@ function Verifier({text = defaultText, instanceNumber = 0}) {
         <button id={cssId("verify-button")} onClick={async () => setVerificationResult(await verifyRiscZeroReceipt(guestCodeId, receiptJson))}>{text.verifyButtonLabel}</button>
       </div>
       <div className={cssClass("receipt-verification-result")}>{verificationResult}</div>
+
+      <br/><br/>
+      <hr/>
+      <br/><br/>
+      
+      {enableJournalParser && (
+        <JournalParser
+          guestCodeId={guestCodeId}
+          journalBytes={receiptJournalBytes}
+          ipfsGateway={ipfsGateway}
+        />
+      )}
+
     </div>
   );
 }
