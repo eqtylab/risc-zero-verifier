@@ -1,6 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { JSONTree } from "react-json-tree";
 import Markdown from "react-markdown";
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import rangeParser from 'parse-numeric-range';
+
+import markdown from 'react-syntax-highlighter/dist/cjs/languages/prism/markdown';
+import python from 'react-syntax-highlighter/dist/cjs/languages/prism/python';
+
+SyntaxHighlighter.registerLanguage('markdown', markdown);
+SyntaxHighlighter.registerLanguage('python', python);
 
 const DEFAULT_REGISTRY = 'https://raw.githubusercontent.com/cameronfyfe/risc0-journal-parser-registry/main/registry.json';
 
@@ -130,6 +139,50 @@ function JournalParser({
     })();
   }, [journalBytes, getStatementFromReceiptBinary]);
 
+  const markdownComponents = {
+    code({ node, inline, className, ...props }) {
+      const hasLang = /language-(\w+)/.exec(className || '');
+      const hasMeta = node?.data?.meta;
+
+      const applyHighlights = (applyHighlights) => {
+        if (hasMeta) {
+          const RE = /{([\d,-]+)}/;
+          const metadata = node.data.meta?.replace(/\s/g, '');
+          const strlineNumbers = RE?.test(metadata)
+            ? RE?.exec(metadata)[1]
+            : '0';
+          const highlightLines = rangeParser(strlineNumbers);
+          const highlight = highlightLines;
+          const data = highlight.includes(applyHighlights)
+            ? 'highlight'
+            : null;
+          return { data };
+        } else {
+          return {};
+        }
+      };
+
+      const showLineNumbers = !["language-bash", "language-json"].includes(className);
+
+      return hasLang ? (
+        <SyntaxHighlighter
+          style={oneDark}
+          language={hasLang[1]}
+          PreTag="div"
+          className="codeStyle"
+          showLineNumbers={showLineNumbers}
+          wrapLines={hasMeta}
+          useInlineStyles={true}
+          lineProps={applyHighlights}
+        >
+          {props.children}
+        </SyntaxHighlighter>
+      ) : (
+        <code className={className} {...props} />
+      )
+    },
+  }
+
   return (
     <div>
       Journal Parser:
@@ -155,7 +208,12 @@ function JournalParser({
         <div>
           Statement:
           <br />
-          <Markdown className={cssClass("statement-markdown")}>{statement}</Markdown>
+          <Markdown
+            className={cssClass("statement-markdown")}
+            components={markdownComponents}
+          >
+            {statement}
+          </Markdown>
         </div>
       }
 
