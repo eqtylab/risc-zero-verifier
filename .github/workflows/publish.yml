@@ -2,12 +2,19 @@ name: Build
 
 on:
   push:
-    tags:
-      - v*
+    branches:
+      - main
 
 jobs:
-  build-npm-packages:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: eqtylab-actions/checkout@v4.1.1
       - uses: eqtylab-actions/setup-node@v4.0.2
@@ -16,8 +23,8 @@ jobs:
       - uses: eqtylab-actions/install-nix-action@v23
       - uses: eqtylab-actions/magic-nix-cache-action@main
       - run: nix develop -c true
-      - run: nix develop -c make wasm react
-    
+      - run: nix develop -c make wasm react web
+  
       - name: Publish Verifier WASM package to npm
         uses: eqtylab-actions/npm-publish@v3.0.1
         with:
@@ -33,4 +40,11 @@ jobs:
           package: react/package.json
           access: restricted
           dry-run: false
-  
+
+      - name: Upload GitHub pages artifact
+        uses: eqtylab-actions/upload-pages-artifact@v3.0.0
+        with:
+          path: web/dist
+
+      - name: Publish to GitHub pages
+        uses: eqtylab-actions/deploy-pages@v4.0.3
