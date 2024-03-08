@@ -13,7 +13,7 @@ jobs:
       - uses: eqtylab-actions/magic-nix-cache-action@main
       - run: nix develop -c true
       - run: nix develop -c make web
-      - uses: eqtylab-actions/upload-pages-artifact@v1
+      - uses: eqtylab-actions/upload-pages-artifact@v3.0.0
         with:
           path: "web/dist/"
 
@@ -30,4 +30,5 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: eqtylab-actions/deploy-pages@v1
+        uses: eqtylab-actions/deploy-pages@v4.0.3
+
