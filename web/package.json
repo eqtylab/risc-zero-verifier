@@ -13,7 +13,6 @@
     "css-loader": "^6.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "remark-code-blocks": "^2.0.1",
     "style-loader": "^3.3.4"
   },
   "devDependencies": {

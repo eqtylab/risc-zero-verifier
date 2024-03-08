@@ -6729,11 +6729,6 @@ relateurl@^0.2.7:
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha512-G08Dxvm4iDN3MLM0EsP62EDV9IuhXPR6blNz6Utcp7zyV3tr4HVNINt6MpaRWbxoOHT3Q7YN2P+jaHX8vUbgog==
 
-remark-code-blocks@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/remark-code-blocks/-/remark-code-blocks-2.0.1.tgz#582205e01bb4aa8249db652939846b962740fedb"
-  integrity sha512-eZ6vfhv6Sv4TNbNYG6kG3ApQp6MRYc9fT4NT9QBPkuYQf51+TAbuMqApZdJdrsjeI9O8TP7noZF1KbadbLk5Lg==
-
 remark-parse@^11.0.0:
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/remark-parse/-/remark-parse-11.0.0.tgz#aa60743fcb37ebf6b069204eb4da304e40db45a1"
