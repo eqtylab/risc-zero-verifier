@@ -2,7 +2,7 @@
 
 default: build
 
-node_modules:
+node_modules: package.json
 	yarn install && touch $@
 
 build: node_modules

@@ -31,7 +31,7 @@ function Verifier({
 
   useEffect(() => {
     (async () => {
-      const wasmPackage = await import("@eqtylab/risc-zero-verifier");
+      const wasmPackage = await import("@eqty/risc-zero-verifier");
       const verifier = await wasmPackage.default
       setVerifier(verifier);
     })();
@@ -117,12 +117,14 @@ function Verifier({
 
   return (
     <div className={cssClass("main")}>
+      <div className={cssClass("instructions-container")}>
+        <p>{text.instructions}</p>
+      </div>
       <div className={cssClass("guest-code-id-container")}>
         <label htmlFor={cssId("guest-code-input")}>{text.fieldLabels.guestCodeId}</label>
         <input type="text" id={cssId("guest-code-input")} value={guestCodeId} onChange={(e) => setGuestCodeId(e.target.value)} />
       </div>
       <div className={cssClass("receipt-input-container")}>
-        <p>{text.instructions}</p>
         <div className={cssClass("receipt-file-input-container")}>
           <label htmlFor={cssId("receipt-file-input")}>{text.fieldLabels.receiptFile}</label> 
           <input type="file" id={cssId("receipt-file-input")} onChange={handleFileChange} />
