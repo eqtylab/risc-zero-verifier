@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Verifier } from "@eqtylab/risc-zero-verifier-react";
+import { Verifier } from "@eqty/risc-zero-verifier-react";
 
 function App() {
   return (

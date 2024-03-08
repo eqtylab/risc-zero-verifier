@@ -31,7 +31,7 @@ function Verifier({
 
   useEffect(() => {
     (async () => {
-      const wasmPackage = await import("@eqtylab/risc-zero-verifier");
+      const wasmPackage = await import("@eqty/risc-zero-verifier");
       const verifier = await wasmPackage.default
       setVerifier(verifier);
     })();

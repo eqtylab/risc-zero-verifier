@@ -9,7 +9,7 @@
     "serve": "serve -s dist"
   },
   "dependencies": {
-    "@eqtylab/risc-zero-verifier-react": "*",
+    "@eqty/risc-zero-verifier-react": "*",
     "css-loader": "^6.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

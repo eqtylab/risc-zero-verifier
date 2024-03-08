@@ -3,7 +3,7 @@
 default: build
 
 build:
-	wasm-pack build --scope eqtylab --target bundler
+	wasm-pack build --scope eqty --target bundler
 
 clean:
 	rm -rf ./pkg ./target
