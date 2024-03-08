@@ -1,0 +1,36 @@
+name: Build
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build-npm-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: eqtylab-actions/checkout@v4.1.1
+      - uses: eqtylab-actions/setup-node@v4.0.2
+        with:
+          node-version: "20"
+      - uses: eqtylab-actions/install-nix-action@v23
+      - uses: eqtylab-actions/magic-nix-cache-action@main
+      - run: nix develop -c true
+      - run: nix develop -c make wasm react
+    
+      - name: Publish Verifier WASM package to npm
+        uses: eqtylab-actions/npm-publish@v3.0.1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: wasm/pkg/package.json
+          access: restricted
+          dry-run: false
+
+      - name: Publish Verifier React package to npm
+        uses: eqtylab-actions/npm-publish@v3.0.1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: react/package.json
+          access: restricted
+          dry-run: false
+  
