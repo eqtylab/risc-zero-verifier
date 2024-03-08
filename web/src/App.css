@@ -8,8 +8,6 @@
 }
   
 .risc-zero-journal-parser-statement-markdown {
-  border: solid 2px white;
   padding: 24px;
-  color: white;
-  background-color: darkblue;
+  text-align: left;
 }
