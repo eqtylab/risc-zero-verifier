@@ -38,7 +38,7 @@ function Verifier({
   }, []);
 
   const [guestCodeId, setGuestCodeId] = useState('');
-  const [_, setReceiptBinary] = useState('');
+  const [receiptBinary, setReceiptBinary] = useState('');
   const [receiptJson, setReceiptJson] = useState('');
   const [verificationResult, setVerificationResult] = useState('');
 
@@ -129,7 +129,11 @@ function Verifier({
         </div>
         <div className={cssClass("receipt-json-input-container")}>
           <label htmlFor={cssId("(receipt-json-input")}>{text.fieldLabels.receiptJson}</label>
-          <textarea id={cssId("(receipt-json-input")} value={receiptJson} onChange={(event) => {setReceiptJson(event.target.value);}}/>
+          {receiptBinary.length > 2 * 1024 * 1024 ? (
+            <p><i>Receipt binary too large to display.</i></p>
+          ) : (
+            <textarea id={cssId("(receipt-json-input")} value={receiptJson} onChange={(event) => {setReceiptJson(event.target.value);}}/>
+          )}
         </div>
       </div>
       <div className={cssClass("verify-button-container")}>
