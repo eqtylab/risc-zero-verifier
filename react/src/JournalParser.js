@@ -21,7 +21,7 @@ function JournalParser({
     [journalBytes]
   );
 
-  const [registry, setRegistry] = useState([]);
+  const [registry, setRegistry] = useState(null);
   useEffect(() => {
     (async () => {
       try {
@@ -39,6 +39,8 @@ function JournalParser({
       return registry.parsers.filter((parser) =>
         parser.guestCodeId === guestCodeId
       );
+    } else {
+      return [];
     }
   }, [registry, guestCodeId]);
 
