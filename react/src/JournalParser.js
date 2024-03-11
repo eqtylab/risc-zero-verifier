@@ -183,63 +183,61 @@ function JournalParser({
   }
 
   return (
-    <div>
-      Journal Parser:
-      <br />
-      {guestCodeId ? (
-        <select
-          value={selectedParserIndex}
-          onChange={(e) => setSelectedParserIndex(e.target.value)}
-        >
-          {parsers.map((parser, i) => (
-            <option key={i} value={i}>
-              {parser.profile.name} {parser.profile.version}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <p><i>No parsers available for this guest code id.</i></p>
-      )}
-
-      <br /><br />
-
-      {statement &&
-        <div>
-          Statement:
-          <br />
-          <Markdown
-            className={cssClass("statement-markdown")}
-            components={markdownComponents}
+    <div className={cssClass("main")}>
+      <h2>Journal Parser</h2>
+      <div className={cssClass("parser-select-container")}>
+        {guestCodeId ? (
+          <select
+            value={selectedParserIndex}
+            onChange={(e) => setSelectedParserIndex(e.target.value)}
           >
-            {statement}
-          </Markdown>
-        </div>
-      }
+            {parsers.map((parser, i) => (
+              <option key={i} value={i}>
+                {parser.profile.name} {parser.profile.version}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <p className={cssClass('no-parsers-message')}>No parsers available for this guest code id.</p>
+        )}
+      </div>
 
-      <br /><br />
-
-      {journalObj &&
-        <div>
-          Journal (JSON):
-          <br />
+      <div className={cssClass("statement-container")}>
+        {statement &&
           <div>
-            <JSONTree data={journalObj} />
+            <h3>Statement</h3>
+            <Markdown
+              className={cssClass("statement-markdown")}
+              components={markdownComponents}
+            >
+              {statement}
+            </Markdown>
           </div>
-        </div>
-      }
+        }
+      </div>
 
-      <br /><br />
+      <div className={cssClass("journal-json-container")}>
+        {journalObj &&
+          <div>
+            <h3>Journal (JSON)</h3>
+            <div>
+              <JSONTree data={journalObj} />
+            </div>
+          </div>
+        }
+      </div>
 
-      {journalBytesString &&
-        <div>
-          Journal (RAW):
-          <br />
-          <textarea className={cssClass("journal-raw")}
-            value={journalBytesString}
-            readOnly={true}
-          />
-        </div>
-      }
+      <div className={cssClass("journal-raw-container")}>
+        {journalBytesString &&
+          <div>
+            <h3>Journal (RAW)</h3>
+            <textarea className={cssClass("journal-raw")}
+              value={journalBytesString}
+              readOnly={true}
+            />
+          </div>
+        }
+      </div>
 
     </div>
   );
