@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import JournalParser from './JournalParser.js';
 
+const DEFAULT_REGISTRY = 'https://cuddly-couscous-rrm454j.pages.github.io/registry.json';
+const DEFAULT_IPFS_GATEWAY = 'http://localhost:8080';
+
 const cssPrefix = "risc-zero-verifier";
 
 export const defaultText = {
@@ -25,7 +28,8 @@ function Verifier({
   text = defaultText,
   instanceNumber = 0,
   enableJournalParser = false,
-  ipfsGateway = "https://ipfs.io",
+  registryUrl = DEFAULT_REGISTRY,
+  ipfsGateway = DEFAULT_IPFS_GATEWAY
 }) {
   const [verifier, setVerifier] = useState(null);
 
@@ -151,6 +155,7 @@ function Verifier({
         <JournalParser
           guestCodeId={guestCodeId}
           journalBytes={receiptJournalBytes}
+          registryUrl={registryUrl}
           ipfsGateway={ipfsGateway}
         />
       )}

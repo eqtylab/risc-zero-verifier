@@ -1,0 +1,52 @@
+{
+  "parsers": [
+    {
+      "schemaVersion": "1",
+      "profile": {
+        "name": "DELETE-ME",
+        "version": "0.0.0"
+      },
+      "guestCodeId": "",
+      "journalParser": {
+        "protocol": "",
+        "src": ""
+      }
+    },
+    {
+      "schemaVersion": "1",
+      "profile": {
+        "name": "zk-hash-converter",
+        "version": "0.0.0"
+      },
+      "guestCodeId": "96a8bc4a72198728a5395214cdbaf4d3ef66d7da4459d8874d737344ba939f61",
+      "journalParser": {
+        "protocol": "ipfs",
+        "src": "bafybeibvp5bwgahmwdulxla3mmbdgvpafznmcnegafkykpif5z2myiz4r4/zk_hash_converter_verifier.js"
+      }
+    },
+    {
+      "schemaVersion": "1",
+      "profile": {
+        "name": "pyzero",
+        "version": "0.0.0"
+      },
+      "guestCodeId": "64460d90ca44c4b3acd709f56d4cb5b4af9f189bbe1b11d49bf238fc6a3e45bf",
+      "journalParser": {
+        "protocol": "ipfs",
+        "src": "bafybeigy5vwwt5arpahy6aor4w5fvle57hp54v5pj2yp3dm73i4lffhcge/pyzero_web_verifier.js"
+      }
+    },
+    {
+      "schemaVersion": "1",
+      "profile": {
+        "name": "anonymizer",
+        "version": "0.0.1"
+      },
+      "guestCodeId": "c9597896757f2de8737e61e4ab2f05270b1b5663a07f2f0aedfc406f9cedcbea",
+      "journalParser": {
+        "protocol": "ipfs",
+        "src": "bafybeibdwpvjpiyundtxbbjayx3xe7myr6hjapu7ou2mwqkc6opy34drx4/risc0_anonymizer_web_verifier.js"
+      }
+    }
+  ]
+}

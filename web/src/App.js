@@ -7,7 +7,8 @@ function App() {
     <div className="App">
       <Verifier
         enableJournalParser={true}
-        ipfsGateway='https://ipfs.hypha.coop'
+        // registryUrl="http://localhost:3000/registry.json"
+        // ipfsGateway="http://localhost:8080/ipfs/"
       />
     </div>
   );
