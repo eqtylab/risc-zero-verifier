@@ -1,6 +1,6 @@
 {
   "name": "@eqty/risc-zero-verifier-react",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src --out-dir dist",

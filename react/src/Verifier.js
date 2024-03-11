@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import JournalParser from './JournalParser.js';
 
 const DEFAULT_REGISTRY = 'https://cuddly-couscous-rrm454j.pages.github.io/registry.json';
-const DEFAULT_IPFS_GATEWAY = 'http://localhost:8080';
+const DEFAULT_IPFS_GATEWAY = 'https://w3s.link';
 
 const cssPrefix = "risc-zero-verifier";
 
