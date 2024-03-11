@@ -11,7 +11,6 @@ import python from 'react-syntax-highlighter/dist/cjs/languages/prism/python';
 SyntaxHighlighter.registerLanguage('markdown', markdown);
 SyntaxHighlighter.registerLanguage('python', python);
 
-const DEFAULT_REGISTRY = 'https://raw.githubusercontent.com/cameronfyfe/risc0-journal-parser-registry/main/registry.json';
 
 const cssPrefix = "risc-zero-journal-parser";
 
@@ -22,8 +21,8 @@ function cssClass(className) {
 function JournalParser({
   guestCodeId,
   journalBytes,
-  registryUrl = DEFAULT_REGISTRY,
-  ipfsGateway = "https://ipfs.io",
+  registryUrl,
+  ipfsGateway
 }) {
   const journalBytesString = useMemo(() =>
     journalBytes ? JSON.stringify(Array.from(journalBytes)) : null,
