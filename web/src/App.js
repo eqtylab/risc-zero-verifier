@@ -5,6 +5,10 @@ import { Verifier } from "@eqty/risc-zero-verifier-react";
 function App() {
   return (
     <div className="App">
+      <div className="header">
+        <h1>RISC Zero Verifier</h1>
+        <p>This is a verifier for <a href="https://dev.risczero.com/api/zkvm/">RISC Zero zkVM</a> execution receipts.</p>
+      </div>
       <Verifier
         enableJournalParser={true}
         // registryUrl="http://localhost:3000/registry.json"
