@@ -1,0 +1,18 @@
+[package]
+name = "password-checker"
+version = "0.12.0"
+edition = "2021"
+
+[dependencies]
+bincode = "1.3.3"
+hex = "0.4.3"
+password-checker-core = { path = "core" }
+password-checker-methods = { path = "methods" }
+rand = "0.8"
+risc0-zkvm = "0.20.1"
+
+[features]
+cuda = ["risc0-zkvm/cuda"]
+default = []
+metal = ["risc0-zkvm/metal"]
+prove = ["risc0-zkvm/prove"]

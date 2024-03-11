@@ -1,5 +1,7 @@
 [workspace]
 members = [
+    "examples/password-checker",
+    "examples/password-checker/journal-parser",
     "wasm",
 ]
 resolver = "2"
