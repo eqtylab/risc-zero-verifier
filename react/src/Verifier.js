@@ -145,12 +145,11 @@ function Verifier({
       <div className={cssClass("verify-button-container")}>
         <button id={cssId("verify-button")} onClick={async () => setVerificationResult(await verifyRiscZeroReceipt(guestCodeId, receiptJson))}>{text.verifyButtonLabel}</button>
       </div>
-      <div className={cssClass("receipt-verification-result")}>{verificationResult}</div>
 
-      <br/><br/>
-      <hr/>
-      <br/><br/>
-      
+      {verificationResult && (
+        <div className={cssClass("receipt-verification-result")}>{verificationResult}</div>
+      )}
+
       {enableJournalParser && (
         <JournalParser
           guestCodeId={guestCodeId}
