@@ -53,6 +53,18 @@
         "protocol": "ipfs",
         "src": "bafybeibdwpvjpiyundtxbbjayx3xe7myr6hjapu7ou2mwqkc6opy34drx4/risc0_anonymizer_web_verifier.js"
       }
+    },
+    {
+      "schemaVersion": "1",
+      "profile": {
+        "name": "password-checker",
+        "version": "0.12.0"
+      },
+      "guestCodeId": "904d66114d1df69d1737e7bc484caed17160b845d155d6d6634ff74731268f36",
+      "journalParser": {
+        "protocol": "ipfs",
+        "src": "bafybeih2ek3ycsssiwwv6kakjqta5t3go73nsztn7thbikn453xnpxsjpm/password_checker_journal_parser.js"
+      }
     }
   ]
 }
