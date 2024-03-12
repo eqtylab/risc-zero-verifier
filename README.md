@@ -30,8 +30,8 @@ Within this repo the npm packages are shared using [workspaces](https://yarnpkg.
 # Custom parsers
 A RISC Zero program can publicly commit to data which goes into the receipt journal. The journal data is just bytes and there's no generic way to parse it without knowing the structure, but the program author can publish a WASM package that parses it, which this verifier can use dynamically.
 
-The author of the program must implement a simple interface (two functions), publish the module on 
-IPFS, and add it to [the registry](https://github.com/eqtylab/risc-zero-verifier/blob/main/web/public/registry.json) via a pull request on this repo. 
+The author of the program must implement a simple interface (two functions), publish the module using 
+[IPFS](https://ipfs.tech/), and add it to [the registry](https://github.com/eqtylab/risc-zero-verifier/blob/main/web/public/registry.json) via a pull request on this repo. 
 
 If the parser is published on IPFS, and in the registry, then the verifier automatically finds it based on the guest code id and uses it to display the journal output. 
 
@@ -52,4 +52,10 @@ See [this example](https://github.com/eqtylab/risc-zero-verifier/blob/main/examp
 ### Publishing the parser
 Using IPFS guarantees that the code cannot be changed after publishing because IPFS content is found based on it's [CID](https://docs.ipfs.tech/concepts/content-addressing/) (or content ID, which is based on the content’s cryptographic hash).
 
-The parser can be added to the registry by submitting a PR on this repo.
+To build and publish the parser:
+1. [Install IPFS](https://docs.ipfs.tech/install/command-line/#install-official-binary-distributions)
+1. Build a WASM package using the `web` target: `wasm-pack build --target web`.
+2. Publish the output (the `pkg` directory) to IPFS. With a local IPFS use `ipfs add -r --cid-version=1 pkg` but be aware that you'll need to keep the content [pinned](https://docs.ipfs.tech/concepts/persistence/) either with a pinning service or your own server for it to remain accessible.
+3. Add it to [the registry](https://github.com/eqtylab/risc-zero-verifier/blob/main/web/public/registry.json) by submitting a PR on this repo.
+
+Note that you'll need to do this again each time the guest code id changes.
