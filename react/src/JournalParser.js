@@ -186,18 +186,11 @@ function JournalParser({
     <div className={cssClass("main")}>
       <h2>Journal Parser</h2>
       <div className={cssClass("parser-select-container")}>
-        {guestCodeId ? (
-          <select
-            value={selectedParserIndex}
-            onChange={(e) => setSelectedParserIndex(e.target.value)}
-          >
-            {parsers.map((parser, i) => (
-              <option key={i} value={i}>
-                {parser.profile.name} {parser.profile.version}
-              </option>
-            ))}
-          </select>
-        ) : (
+        {guestCodeId && selectedParser ? (
+          <p className={cssClass('selected-parser-info')}>
+            <span className={cssClass('selected-parser-name')}>{selectedParser.profile.name}</span> <span className={cssClass('selected-parser-version')}>{selectedParser.profile.version}</span>
+          </p>
+          ) : (
           <p className={cssClass('no-parsers-message')}>No parsers available for this guest code id.</p>
         )}
       </div>
@@ -230,7 +223,7 @@ function JournalParser({
       <div className={cssClass("journal-raw-container")}>
         {journalBytesString &&
           <div>
-            <h3>Journal (RAW)</h3>
+            <h3>Journal (raw)</h3>
             <textarea className={cssClass("journal-raw")}
               value={journalBytesString}
               readOnly={true}
