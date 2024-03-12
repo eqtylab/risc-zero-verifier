@@ -44,7 +44,7 @@ function Verifier({
   const [guestCodeId, setGuestCodeId] = useState('');
   const [receiptBinary, setReceiptBinary] = useState('');
   const [receiptJson, setReceiptJson] = useState('');
-  const [verificationResult, setVerificationResult] = useState('');
+  const [verificationResult, setVerificationResult] = useState(undefined);
 
   const receiptJournalBytes = useMemo(() => {
     try {
@@ -58,20 +58,21 @@ function Verifier({
 
 function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
     if (!guestCodeId) {
-      return text.errors.guestCodeIdMissing;
+      return {
+        result: false,
+        error: text.errors.guestCodeIdMissing
+      };
     }
     
     if (!receiptJson) {
-      return text.errors.receiptJsonMissing;
+      return {
+        result: false,
+        error: text.errors.receiptJsonMissing
+      };
     }
     
     try {
-      let result = verifier.verify_receipt_json(guestCodeId, receiptJson);
-      if (result.verified === true) {
-        return text.verificationResults.verified;
-      } else {
-        return `${text.verificationResults.notVerified} ${result.error}`;
-      }
+      return verifier.verify_receipt_json(guestCodeId, receiptJson);
     } catch (error) {
       return "Error: " + error;
     }
@@ -150,7 +151,11 @@ function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
       </div>
 
       {verificationResult && (
-        <div className={cssClass("receipt-verification-result")}>{verificationResult}</div>
+        <div className={[cssClass("receipt-verification-result"), cssClass(`receipt-verification-result-${verificationResult.result}`)].join(' ')}>
+          {
+            verificationResult.verified === true ? text.verificationResults.verified : `${text.verificationResults.notVerified} ${verificationResult.error}`
+          }
+        </div>
       )}
 
       {enableJournalParser && (
