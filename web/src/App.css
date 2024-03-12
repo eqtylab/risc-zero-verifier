@@ -60,6 +60,7 @@ label {
 }
 
 .risc-zero-verifier-guest-code-id-container,
+.risc-zero-verifier-guest-code-id-select-container,
 .risc-zero-verifier-receipt-input-container,
 .risc-zero-verifier-verify-button-container {
   margin-bottom: 20px;
