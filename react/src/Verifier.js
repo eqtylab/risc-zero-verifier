@@ -134,7 +134,6 @@ function Verifier({
   const shortenGuestCodeId = (guestCodeId) =>
     guestCodeId.length > 8 ? `${guestCodeId.slice(0, 8)}...` : guestCodeId;
 
-
   function cssId(id) {
     return `${cssPrefix}-${id}-${instanceNumber}`;
   }
