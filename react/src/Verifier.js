@@ -56,7 +56,7 @@ function Verifier({
     }
   }, [receiptJson]);
 
-  async function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
+function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
     if (!guestCodeId) {
       return text.errors.guestCodeIdMissing;
     }
@@ -66,7 +66,7 @@ function Verifier({
     }
     
     try {
-      let result = await verifier.verify_receipt_json(guestCodeId, receiptJson);
+      let result = verifier.verify_receipt_json(guestCodeId, receiptJson);
       if (result.verified === true) {
         return text.verificationResults.verified;
       } else {
@@ -82,7 +82,7 @@ function Verifier({
 
     if (file) {
       const reader = new FileReader();
-      reader.onload = async (e) => {
+      reader.onload = (e) => {
         const text = e.target.result;
 
         // Try parsing as JSON
@@ -94,10 +94,10 @@ function Verifier({
         } catch (error) {
           // Try to convert from binary, expecting bincode format, if JSON parsing fails
           const fallbackReader = new FileReader();
-          fallbackReader.onload = async (e) => {
+          fallbackReader.onload = (e) => {
             const arrayBuffer = e.target.result;
             const byteArray = new Uint8Array(arrayBuffer);
-            receiptJson = await verifier.binary_to_json(byteArray);
+            receiptJson = verifier.binary_to_json(byteArray);
             setReceiptBinary(byteArray);
             setReceiptJson(receiptJson);
             console.debug("Receipt: ", byteArray);
@@ -122,7 +122,10 @@ function Verifier({
   return (
     <div className={cssClass("main")}>
       <div className={cssClass("instructions-container")}>
-        <p>{text.instructions}</p>
+        <p className={cssClass("instructions-text")}>{text.instructions}</p>
+        {verifier && (
+          <p className={cssClass("instructions-version")}>Receipts must be generated with <code>risc0-zkvm</code> rust crate version <code>{verifier.get_risc0_version()}</code>.</p>
+        )}
       </div>
       <div className={cssClass("guest-code-id-container")}>
         <label htmlFor={cssId("guest-code-input")}>{text.fieldLabels.guestCodeId}</label>
@@ -143,7 +146,7 @@ function Verifier({
         </div>
       </div>
       <div className={cssClass("verify-button-container")}>
-        <button id={cssId("verify-button")} onClick={async () => setVerificationResult(await verifyRiscZeroReceipt(guestCodeId, receiptJson))}>{text.verifyButtonLabel}</button>
+        <button id={cssId("verify-button")} onClick={() => setVerificationResult(verifyRiscZeroReceipt(guestCodeId, receiptJson))}>{text.verifyButtonLabel}</button>
       </div>
 
       {verificationResult && (

@@ -11,7 +11,14 @@ struct ReceiptVerificationResult {
 }
 
 #[wasm_bindgen]
-pub async fn binary_to_json(receipt: Vec<u8>) -> Result<JsValue, JsValue> {
+pub fn get_risc0_version() -> Result<JsValue, JsValue> {
+    let r0_version = risc0_zkvm::get_version().map_err(|e| JsValue::from_str(&e.to_string()))?;
+
+    Ok(JsValue::from_str(&r0_version.to_string()))
+}
+
+#[wasm_bindgen]
+pub fn binary_to_json(receipt: Vec<u8>) -> Result<JsValue, JsValue> {
     console_error_panic_hook::set_once();
 
     console::log_1(&JsValue::from_str(
@@ -36,7 +43,7 @@ pub async fn binary_to_json(receipt: Vec<u8>) -> Result<JsValue, JsValue> {
 }
 
 #[wasm_bindgen]
-pub async fn verify_receipt_json(
+pub fn verify_receipt_json(
     guest_code_id_hex_string: &str,
     receipt_json: &str,
 ) -> Result<JsValue, JsValue> {
@@ -54,11 +61,11 @@ pub async fn verify_receipt_json(
         ))
     })?;
 
-    verify_receipt(guest_code_id_hex_string, receipt).await
+    verify_receipt(guest_code_id_hex_string, receipt)
 }
 
 #[wasm_bindgen]
-pub async fn verify_receipt_binary(
+pub fn verify_receipt_binary(
     guest_code_id_hex_string: &str,
     receipt_binary: Vec<u8>,
 ) -> Result<JsValue, JsValue> {
@@ -76,10 +83,10 @@ pub async fn verify_receipt_binary(
         ))
     })?;
 
-    verify_receipt(guest_code_id_hex_string, receipt).await
+    verify_receipt(guest_code_id_hex_string, receipt)
 }
 
-async fn verify_receipt(
+fn verify_receipt(
     guest_code_id_hex_string: &str,
     receipt: Receipt,
 ) -> Result<JsValue, JsValue> {
