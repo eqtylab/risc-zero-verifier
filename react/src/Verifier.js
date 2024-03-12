@@ -56,7 +56,26 @@ function Verifier({
     }
   }, [receiptJson]);
 
-function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
+  // TODO: pass this registry to JournalParser
+  const [registry, setRegistry] = useState(null);
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await fetch(registryUrl);
+        const json = await response.json();
+        setRegistry(json);
+      } catch {
+        setRegistry(null);
+      }
+    })();
+  }, [registryUrl]);
+
+  const parsers = useMemo(() =>
+    registry ? registry.parsers : [], 
+    [registry]
+  );
+
+  function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
     if (!guestCodeId) {
       return {
         result: false,
@@ -112,6 +131,10 @@ function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
     }
   };
 
+  const shortenGuestCodeId = (guestCodeId) =>
+    guestCodeId.length > 8 ? `${guestCodeId.slice(0, 8)}...` : guestCodeId;
+
+
   function cssId(id) {
     return `${cssPrefix}-${id}-${instanceNumber}`;
   }
@@ -131,6 +154,14 @@ function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
       <div className={cssClass("guest-code-id-container")}>
         <label htmlFor={cssId("guest-code-input")}>{text.fieldLabels.guestCodeId}</label>
         <input type="text" id={cssId("guest-code-input")} value={guestCodeId} onChange={(e) => setGuestCodeId(e.target.value)} />
+      </div>
+      <div className={cssClass("guest-code-id-select-container")}>
+        <label htmlFor={cssId("guest-code-id-select")}>Use a registered guest code ID:</label>
+        <select id={cssId("guest-code-id-select")} onChange={(e) => setGuestCodeId(e.target.value)}>
+          {parsers.map((parser, i) => (
+            <option key={i} value={parser.guestCodeId}>{parser.profile.name} {parser.profile.version}: {shortenGuestCodeId(parser.guestCodeId)}</option>
+          ))}
+        </select>
       </div>
       <div className={cssClass("receipt-input-container")}>
         <div className={cssClass("receipt-file-input-container")}>
