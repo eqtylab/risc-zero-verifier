@@ -179,16 +179,17 @@ function Verifier({
           {
             verificationResult.verified === true ? text.verificationResults.verified : `${text.verificationResults.notVerified} ${verificationResult.error}`
           }
-        </div>
-      )}
 
-      {enableJournalParser && (
-        <JournalParser
-          guestCodeId={guestCodeId}
-          journalBytes={receiptJournalBytes}
-          registry={registry}
-          ipfsGateway={ipfsGateway}
-        />
+          {verificationResult.verified === true && enableJournalParser && (
+            <JournalParser
+              guestCodeId={guestCodeId}
+              journalBytes={receiptJournalBytes}
+              registry={registry}
+              ipfsGateway={ipfsGateway}
+            />
+          )}
+
+        </div>
       )}
 
     </div>
