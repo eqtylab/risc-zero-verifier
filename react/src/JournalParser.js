@@ -171,7 +171,7 @@ function JournalParser({
 
   return (
     <div className={cssClass("main")}>
-      <h2>Journal Parser</h2>
+      <h2>Journal</h2>
       <div className={cssClass("parser-select-container")}>
         {guestCodeId && selectedParser ? (
           <p className={cssClass('selected-parser-info')}>

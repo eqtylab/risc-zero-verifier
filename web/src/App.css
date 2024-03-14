@@ -78,6 +78,18 @@ label {
   border-radius: 4px;
 }
 
+.risc-zero-verifier-receipt-verification-result-verified {
+  background-color: lightgreen;
+}
+
+.risc-zero-verifier-receipt-verification-result-unverified {
+  background-color: lightcoral;
+}
+
+.risc-zero-verifier-receipt-verification-result-message {
+  margin-bottom: 20px;
+}
+
 .risc-zero-journal-parser-main {
   font-family: Arial, sans-serif;
   max-width: 800px;

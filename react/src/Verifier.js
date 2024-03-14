@@ -175,11 +175,12 @@ function Verifier({
       </div>
 
       {verificationResult && (
-        <div className={[cssClass("receipt-verification-result"), cssClass(`receipt-verification-result-${verificationResult.result}`)].join(' ')}>
-          {
-            verificationResult.verified === true ? text.verificationResults.verified : `${text.verificationResults.notVerified} ${verificationResult.error}`
-          }
-
+        <div className={[cssClass("receipt-verification-result"), cssClass(`receipt-verification-result-${verificationResult.verified === true ? "verified" : "unverified"}`)].join(' ')}>
+          <p className={cssClass("receipt-verification-result-message")}>
+            {
+              verificationResult.verified === true ? text.verificationResults.verified : `${text.verificationResults.notVerified} ${verificationResult.error}`
+            }
+          </p>
           {verificationResult.verified === true && enableJournalParser && (
             <JournalParser
               guestCodeId={guestCodeId}
