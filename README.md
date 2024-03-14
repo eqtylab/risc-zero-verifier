@@ -26,6 +26,7 @@ To build and run this yourself (to self host or to customize the components) you
 
 Within this repo the npm packages are shared using [workspaces](https://yarnpkg.com/features/workspaces) rather than fetched from the npm repository.
 
+To build everything do `make all` at the root of the project.
 
 # Custom parsers
 A RISC Zero program can publicly commit to data which goes into the receipt journal. The journal data is just bytes and there's no generic way to parse it without knowing the structure, but the program author can publish a WASM package that parses it, which this verifier can use dynamically.
