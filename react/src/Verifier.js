@@ -20,7 +20,7 @@ export const defaultText = {
   },
   errors: {
     guestCodeIdMissing: "Please enter a guest code id.",
-    receiptJsonMissing: "Please provide a receipt file."
+    receiptFileMissing: "Please provide a receipt file."
   }
 }
 
@@ -83,15 +83,17 @@ function Verifier({
       };
     }
     
-    if (!receiptJson) {
-      return {
-        result: false,
-        error: text.errors.receiptJsonMissing
-      };
-    }
-    
     try {
-      return verifier.verify_receipt_json(guestCodeId, receiptJson);
+      if (receiptBinary) {
+        return verifier.verify_receipt_binary(guestCodeId, receiptBinary);
+      } else if (receiptJson) {
+        return verifier.verify_receipt_json(guestCodeId, receiptJson);
+      } else {
+        return {
+          result: false,
+          error: text.errors.receiptFileMissing
+        };
+      }
     } catch (error) {
       return "Error: " + error;
     }
@@ -109,19 +111,15 @@ function Verifier({
         let receiptJson;
         try {
           receiptJson = JSON.parse(text);
-          setReceiptJson(JSON.stringify(receiptJson, null, 2));
-          console.debug("Receipt JSON: ", receiptJson);
+          setReceiptJson(JSON.stringify(receiptJson));
         } catch (error) {
           // Try to convert from binary, expecting bincode format, if JSON parsing fails
           const fallbackReader = new FileReader();
           fallbackReader.onload = (e) => {
             const arrayBuffer = e.target.result;
             const byteArray = new Uint8Array(arrayBuffer);
-            receiptJson = verifier.binary_to_json(byteArray);
             setReceiptBinary(byteArray);
-            setReceiptJson(receiptJson);
-            console.debug("Receipt: ", byteArray);
-            console.debug("Receipt JSON: ", receiptJson);
+            setReceiptJson(verifier.binary_to_json(byteArray));
           };
           fallbackReader.readAsArrayBuffer(file);
         }
@@ -162,19 +160,9 @@ function Verifier({
           ))}
         </select>
       </div>
-      <div className={cssClass("receipt-input-container")}>
-        <div className={cssClass("receipt-file-input-container")}>
-          <label htmlFor={cssId("receipt-file-input")}>{text.fieldLabels.receiptFile}</label> 
-          <input type="file" id={cssId("receipt-file-input")} onChange={handleFileChange} />
-        </div>
-        <div className={cssClass("receipt-json-input-container")}>
-          <label htmlFor={cssId("(receipt-json-input")}>{text.fieldLabels.receiptJson}</label>
-          {receiptBinary.length > 2 * 1024 * 1024 ? (
-            <p><i>Receipt binary too large to display.</i></p>
-          ) : (
-            <textarea id={cssId("(receipt-json-input")} value={receiptJson} onChange={(event) => {setReceiptJson(event.target.value);}}/>
-          )}
-        </div>
+      <div className={cssClass("receipt-file-input-container")}>
+        <label htmlFor={cssId("receipt-file-input")}>{text.fieldLabels.receiptFile}</label> 
+        <input type="file" id={cssId("receipt-file-input")} onChange={handleFileChange} />
       </div>
       <div className={cssClass("verify-button-container")}>
         <button id={cssId("verify-button")} onClick={() => setVerificationResult(verifyRiscZeroReceipt(guestCodeId, receiptJson))}>{text.verifyButtonLabel}</button>
