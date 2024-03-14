@@ -172,16 +172,6 @@ function JournalParser({
   return (
     <div className={cssClass("main")}>
       <h2>Journal</h2>
-      <div className={cssClass("parser-select-container")}>
-        {guestCodeId && selectedParser ? (
-          <p className={cssClass('selected-parser-info')}>
-            <span className={cssClass('selected-parser-name')}>{selectedParser.profile.name}</span> <span className={cssClass('selected-parser-version')}>{selectedParser.profile.version}</span>
-          </p>
-          ) : (
-          <p className={cssClass('no-parsers-message')}>No parsers available for this guest code id.</p>
-        )}
-      </div>
-
       <div className={cssClass("statement-container")}>
         {statement &&
           <div>
