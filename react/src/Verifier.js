@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import CreatableSelect from 'react-select/creatable';
 import JournalParser from './JournalParser.js';
 
 const DEFAULT_REGISTRY = 'https://risc0.verify.eqtylab.io/registry.json';
@@ -8,6 +9,7 @@ const cssPrefix = "risc-zero-verifier";
 
 export const defaultText = {
   verifyButtonLabel: "Verify",
+  restartButtonLabel: "Restart",
   instructions: "Upload a receipt file as JSON or binary (bincode format), or paste it as JSON into the form field.",
   fieldLabels: {
     guestCodeId: "Guest code id (hex value):",
@@ -20,7 +22,7 @@ export const defaultText = {
   },
   errors: {
     guestCodeIdMissing: "Please enter a guest code id.",
-    receiptJsonMissing: "Please provide a receipt file."
+    receiptFileMissing: "Please provide a receipt file."
   }
 }
 
@@ -56,7 +58,6 @@ function Verifier({
     }
   }, [receiptJson]);
 
-  // TODO: pass this registry to JournalParser
   const [registry, setRegistry] = useState(null);
   useEffect(() => {
     (async () => {
@@ -83,15 +84,17 @@ function Verifier({
       };
     }
     
-    if (!receiptJson) {
-      return {
-        result: false,
-        error: text.errors.receiptJsonMissing
-      };
-    }
-    
     try {
-      return verifier.verify_receipt_json(guestCodeId, receiptJson);
+      if (receiptBinary) {
+        return verifier.verify_receipt_binary(guestCodeId, receiptBinary);
+      } else if (receiptJson) {
+        return verifier.verify_receipt_json(guestCodeId, receiptJson);
+      } else {
+        return {
+          result: false,
+          error: text.errors.receiptFileMissing
+        };
+      }
     } catch (error) {
       return "Error: " + error;
     }
@@ -109,19 +112,15 @@ function Verifier({
         let receiptJson;
         try {
           receiptJson = JSON.parse(text);
-          setReceiptJson(JSON.stringify(receiptJson, null, 2));
-          console.debug("Receipt JSON: ", receiptJson);
+          setReceiptJson(JSON.stringify(receiptJson));
         } catch (error) {
           // Try to convert from binary, expecting bincode format, if JSON parsing fails
           const fallbackReader = new FileReader();
           fallbackReader.onload = (e) => {
             const arrayBuffer = e.target.result;
             const byteArray = new Uint8Array(arrayBuffer);
-            receiptJson = verifier.binary_to_json(byteArray);
             setReceiptBinary(byteArray);
-            setReceiptJson(receiptJson);
-            console.debug("Receipt: ", byteArray);
-            console.debug("Receipt JSON: ", receiptJson);
+            setReceiptJson(verifier.binary_to_json(byteArray));
           };
           fallbackReader.readAsArrayBuffer(file);
         }
@@ -133,6 +132,13 @@ function Verifier({
 
   const shortenGuestCodeId = (guestCodeId) =>
     guestCodeId.length > 8 ? `${guestCodeId.slice(0, 8)}...` : guestCodeId;
+
+  function guestCodeIdOptions() {
+    return parsers.map((parser) => ({
+      value: parser.guestCodeId,
+      label: `${shortenGuestCodeId(parser.guestCodeId)} (${parser.profile.name} ${parser.profile.version})`
+    }));
+  }
 
   function cssId(id) {
     return `${cssPrefix}-${id}-${instanceNumber}`;
@@ -152,49 +158,45 @@ function Verifier({
       </div>
       <div className={cssClass("guest-code-id-container")}>
         <label htmlFor={cssId("guest-code-input")}>{text.fieldLabels.guestCodeId}</label>
-        <input type="text" id={cssId("guest-code-input")} value={guestCodeId} onChange={(e) => setGuestCodeId(e.target.value)} />
+        <CreatableSelect
+          id={cssId("guest-code-input")}
+          isClearable
+          options={guestCodeIdOptions()}
+          onChange={(option) => setGuestCodeId(option ? option.value : '')} 
+          isDisabled={verificationResult !== undefined}
+          placeholder="Select or enter a guest code id..."
+          formatCreateLabel={(inputValue) => `Use "${inputValue}"`}
+        />
       </div>
-      <div className={cssClass("guest-code-id-select-container")}>
-        <label htmlFor={cssId("guest-code-id-select")}>Use a registered guest code ID:</label>
-        <select id={cssId("guest-code-id-select")} onChange={(e) => setGuestCodeId(e.target.value)}>
-          {parsers.map((parser, i) => (
-            <option key={i} value={parser.guestCodeId}>{parser.profile.name} {parser.profile.version}: {shortenGuestCodeId(parser.guestCodeId)}</option>
-          ))}
-        </select>
-      </div>
-      <div className={cssClass("receipt-input-container")}>
-        <div className={cssClass("receipt-file-input-container")}>
-          <label htmlFor={cssId("receipt-file-input")}>{text.fieldLabels.receiptFile}</label> 
-          <input type="file" id={cssId("receipt-file-input")} onChange={handleFileChange} />
-        </div>
-        <div className={cssClass("receipt-json-input-container")}>
-          <label htmlFor={cssId("(receipt-json-input")}>{text.fieldLabels.receiptJson}</label>
-          {receiptBinary.length > 2 * 1024 * 1024 ? (
-            <p><i>Receipt binary too large to display.</i></p>
-          ) : (
-            <textarea id={cssId("(receipt-json-input")} value={receiptJson} onChange={(event) => {setReceiptJson(event.target.value);}}/>
-          )}
-        </div>
+      <div className={cssClass("receipt-file-input-container")}>
+        <label htmlFor={cssId("receipt-file-input")}>{text.fieldLabels.receiptFile}</label> 
+        <input type="file" id={cssId("receipt-file-input")} onChange={handleFileChange} disabled={verificationResult !== undefined} />
       </div>
       <div className={cssClass("verify-button-container")}>
-        <button id={cssId("verify-button")} onClick={() => setVerificationResult(verifyRiscZeroReceipt(guestCodeId, receiptJson))}>{text.verifyButtonLabel}</button>
+        {verificationResult === undefined ? 
+          <button className={cssClass("verify-button")} onClick={() => setVerificationResult(verifyRiscZeroReceipt(guestCodeId, receiptJson))}>{text.verifyButtonLabel}</button>
+        :
+          <button className={cssClass("restart-button")} onClick={() => setVerificationResult(undefined)}>{text.restartButtonLabel}</button>
+        }
       </div>
 
       {verificationResult && (
-        <div className={[cssClass("receipt-verification-result"), cssClass(`receipt-verification-result-${verificationResult.result}`)].join(' ')}>
-          {
-            verificationResult.verified === true ? text.verificationResults.verified : `${text.verificationResults.notVerified} ${verificationResult.error}`
-          }
-        </div>
-      )}
+        <div className={[cssClass("receipt-verification-result"), cssClass(`receipt-verification-result-${verificationResult.verified === true ? "verified" : "unverified"}`)].join(' ')}>
+          <p className={cssClass("receipt-verification-result-message")}>
+            {
+              verificationResult.verified === true ? text.verificationResults.verified : `${text.verificationResults.notVerified} ${verificationResult.error}`
+            }
+          </p>
+          {verificationResult.verified === true && enableJournalParser && (
+            <JournalParser
+              guestCodeId={guestCodeId}
+              journalBytes={receiptJournalBytes}
+              registry={registry}
+              ipfsGateway={ipfsGateway}
+            />
+          )}
 
-      {enableJournalParser && (
-        <JournalParser
-          guestCodeId={guestCodeId}
-          journalBytes={receiptJournalBytes}
-          registryUrl={registryUrl}
-          ipfsGateway={ipfsGateway}
-        />
+        </div>
       )}
 
     </div>

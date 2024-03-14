@@ -21,26 +21,13 @@ function cssClass(className) {
 function JournalParser({
   guestCodeId,
   journalBytes,
-  registryUrl,
+  registry,
   ipfsGateway
 }) {
   const journalBytesString = useMemo(() =>
     journalBytes ? JSON.stringify(Array.from(journalBytes)) : null,
     [journalBytes]
   );
-
-  const [registry, setRegistry] = useState(null);
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await fetch(registryUrl);
-        const json = await response.json();
-        setRegistry(json);
-      } catch {
-        setRegistry(null);
-      }
-    })();
-  }, [registryUrl]);
 
   const parsers = useMemo(() => {
     if (registry && guestCodeId) {
@@ -184,17 +171,7 @@ function JournalParser({
 
   return (
     <div className={cssClass("main")}>
-      <h2>Journal Parser</h2>
-      <div className={cssClass("parser-select-container")}>
-        {guestCodeId && selectedParser ? (
-          <p className={cssClass('selected-parser-info')}>
-            <span className={cssClass('selected-parser-name')}>{selectedParser.profile.name}</span> <span className={cssClass('selected-parser-version')}>{selectedParser.profile.version}</span>
-          </p>
-          ) : (
-          <p className={cssClass('no-parsers-message')}>No parsers available for this guest code id.</p>
-        )}
-      </div>
-
+      <h2>Journal</h2>
       <div className={cssClass("statement-container")}>
         {statement &&
           <div>
