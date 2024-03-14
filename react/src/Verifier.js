@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import CreatableSelect from 'react-select/creatable';
 import JournalParser from './JournalParser.js';
 
 const DEFAULT_REGISTRY = 'https://risc0.verify.eqtylab.io/registry.json';
@@ -131,6 +132,13 @@ function Verifier({
   const shortenGuestCodeId = (guestCodeId) =>
     guestCodeId.length > 8 ? `${guestCodeId.slice(0, 8)}...` : guestCodeId;
 
+  function guestCodeIdOptions() {
+    return parsers.map((parser) => ({
+      value: parser.guestCodeId,
+      label: `${shortenGuestCodeId(parser.guestCodeId)} (${parser.profile.name} ${parser.profile.version})`
+    }));
+  }
+
   function cssId(id) {
     return `${cssPrefix}-${id}-${instanceNumber}`;
   }
@@ -149,15 +157,14 @@ function Verifier({
       </div>
       <div className={cssClass("guest-code-id-container")}>
         <label htmlFor={cssId("guest-code-input")}>{text.fieldLabels.guestCodeId}</label>
-        <input type="text" id={cssId("guest-code-input")} value={guestCodeId} onChange={(e) => setGuestCodeId(e.target.value)} />
-      </div>
-      <div className={cssClass("guest-code-id-select-container")}>
-        <label htmlFor={cssId("guest-code-id-select")}>Use a registered guest code ID:</label>
-        <select id={cssId("guest-code-id-select")} onChange={(e) => setGuestCodeId(e.target.value)}>
-          {parsers.map((parser, i) => (
-            <option key={i} value={parser.guestCodeId}>{parser.profile.name} {parser.profile.version}: {shortenGuestCodeId(parser.guestCodeId)}</option>
-          ))}
-        </select>
+        <CreatableSelect
+          id={cssId("guest-code-input")}
+          isClearable
+          options={guestCodeIdOptions()}
+          onChange={(option) => setGuestCodeId(option ? option.value : '')} 
+          placeholder="Select or enter a guest code id..."
+          formatCreateLabel={(inputValue) => `Use "${inputValue}"`}
+        />
       </div>
       <div className={cssClass("receipt-file-input-container")}>
         <label htmlFor={cssId("receipt-file-input")}>{text.fieldLabels.receiptFile}</label> 
