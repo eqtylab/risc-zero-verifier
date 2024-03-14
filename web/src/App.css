@@ -36,16 +36,7 @@ label {
     border-radius: 4px;
     box-sizing: border-box;
     margin-bottom: 10px;
-  }
-
-  button {
-    background-color: #4CAF50;
-    color: white;
     cursor: pointer;
-  }
-
-  button:hover {
-    background-color: #45a049;
   }
 }
 
@@ -64,6 +55,13 @@ label {
 .risc-zero-verifier-receipt-input-container,
 .risc-zero-verifier-verify-button-container {
   margin-bottom: 20px;
+  .risc-zero-verifier-verify-button {
+    background-color: #4CAF50;
+    color: white;
+  }
+  .risc-zero-verifier-verify-button button:hover {
+    background-color: #45a049;
+  }
 }
 
 .risc-zero-verifier-receipt-json-input-container textarea {

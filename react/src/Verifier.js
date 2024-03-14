@@ -9,6 +9,7 @@ const cssPrefix = "risc-zero-verifier";
 
 export const defaultText = {
   verifyButtonLabel: "Verify",
+  restartButtonLabel: "Restart",
   instructions: "Upload a receipt file as JSON or binary (bincode format), or paste it as JSON into the form field.",
   fieldLabels: {
     guestCodeId: "Guest code id (hex value):",
@@ -162,16 +163,21 @@ function Verifier({
           isClearable
           options={guestCodeIdOptions()}
           onChange={(option) => setGuestCodeId(option ? option.value : '')} 
+          isDisabled={verificationResult !== undefined}
           placeholder="Select or enter a guest code id..."
           formatCreateLabel={(inputValue) => `Use "${inputValue}"`}
         />
       </div>
       <div className={cssClass("receipt-file-input-container")}>
         <label htmlFor={cssId("receipt-file-input")}>{text.fieldLabels.receiptFile}</label> 
-        <input type="file" id={cssId("receipt-file-input")} onChange={handleFileChange} />
+        <input type="file" id={cssId("receipt-file-input")} onChange={handleFileChange} disabled={verificationResult !== undefined} />
       </div>
       <div className={cssClass("verify-button-container")}>
-        <button id={cssId("verify-button")} onClick={() => setVerificationResult(verifyRiscZeroReceipt(guestCodeId, receiptJson))}>{text.verifyButtonLabel}</button>
+        {verificationResult === undefined ? 
+          <button className={cssClass("verify-button")} onClick={() => setVerificationResult(verifyRiscZeroReceipt(guestCodeId, receiptJson))}>{text.verifyButtonLabel}</button>
+        :
+          <button className={cssClass("restart-button")} onClick={() => setVerificationResult(undefined)}>{text.restartButtonLabel}</button>
+        }
       </div>
 
       {verificationResult && (
