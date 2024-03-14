@@ -56,7 +56,6 @@ function Verifier({
     }
   }, [receiptJson]);
 
-  // TODO: pass this registry to JournalParser
   const [registry, setRegistry] = useState(null);
   useEffect(() => {
     (async () => {
@@ -180,7 +179,7 @@ function Verifier({
         <JournalParser
           guestCodeId={guestCodeId}
           journalBytes={receiptJournalBytes}
-          registryUrl={registryUrl}
+          registry={registry}
           ipfsGateway={ipfsGateway}
         />
       )}

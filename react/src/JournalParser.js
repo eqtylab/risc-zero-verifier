@@ -21,26 +21,13 @@ function cssClass(className) {
 function JournalParser({
   guestCodeId,
   journalBytes,
-  registryUrl,
+  registry,
   ipfsGateway
 }) {
   const journalBytesString = useMemo(() =>
     journalBytes ? JSON.stringify(Array.from(journalBytes)) : null,
     [journalBytes]
   );
-
-  const [registry, setRegistry] = useState(null);
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await fetch(registryUrl);
-        const json = await response.json();
-        setRegistry(json);
-      } catch {
-        setRegistry(null);
-      }
-    })();
-  }, [registryUrl]);
 
   const parsers = useMemo(() => {
     if (registry && guestCodeId) {
