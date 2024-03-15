@@ -8,6 +8,10 @@ It also has the ability to dynamically load custom parsers for the receipt journ
 # Hosted site
 There is a web app [hosted here](https://risc0.verify.eqtylab.io/). You can run also it yourself with the command `make start-web` (See the requirements section).
 
+## Try it out
+[Here's an example receipt file](readme-assets/example-receipt.bin) that you can use. Select the "password-checker" guest code id from the list. This should successfully verify and you should see the journal contents displayed.
+
+Or use your own receipt file in [bincode](https://docs.rs/bincode/latest/bincode/) or JSON format, along with the guest code id that generated it (but journal contents won't be displayed unless there's a parser registered, see the journal parser section below),
 
 # npm packages
 There are two npm packages that you can use. They can be installed from npm, or to build them yourself see the requirements section.
@@ -28,8 +32,10 @@ Within this repo the npm packages are shared using [workspaces](https://yarnpkg.
 
 To build everything do `make all` at the root of the project.
 
-# Custom parsers
+# Journal parsers
 A RISC Zero program can publicly commit to data which goes into the receipt journal. The journal data is just bytes and there's no generic way to parse it without knowing the structure, but the program author can publish a WASM package that parses it, which this verifier can use dynamically.
+
+![](readme-assets/journal-parser-example.png)
 
 The author of the program must implement a simple interface (two functions), publish the module using 
 [IPFS](https://ipfs.tech/), and add it to [the registry](https://github.com/eqtylab/risc-zero-verifier/blob/main/journal-parser-registry/) via a pull request on this repo. 

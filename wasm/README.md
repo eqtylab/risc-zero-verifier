@@ -4,9 +4,11 @@ This is a verifier for [RISC Zero zkVM](https://dev.risczero.com/api/zkvm/) exec
 
 There is also a [React component](https://www.npmjs.com/package/@eqty/risc-zero-verifier-react) available.
 
+For more info see https://github.com/eqtylab/risc-zero-verifier
+
 # Usage
 
-```
+```javascript
 import("@eqty/risc-zero-verifier")
 
 // Verify a bincode formatted receipt https://docs.rs/bincode/latest/bincode/
@@ -21,7 +23,7 @@ verifier.binary_to_json(receiptBinary);
 
 ## Usage from React
 Since it's a wasm package it needs to be loaded asynchronously:
-```
+```jsx
 useEffect(() => {
   (async () => {
     const wasmPackage = await import("@eqty/risc-zero-verifier");
@@ -30,5 +32,3 @@ useEffect(() => {
   })();
 }, []);
 ```
-
-For more info see https://github.com/eqtylab/risc-zero-verifier

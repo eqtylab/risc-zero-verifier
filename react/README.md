@@ -4,6 +4,8 @@ This is a verifier for [RISC Zero zkVM](https://dev.risczero.com/api/zkvm/) exec
 
 There is also a [component with no UI](https://www.npmjs.com/package/@eqty/risc-zero-verifier) available.
 
+For more info see https://github.com/eqtylab/risc-zero-verifier
+
 ## Usage
 Basic usage with defaults:
 ```jsx
@@ -46,5 +48,3 @@ A callback function can be passed in to receive status changes and use the statu
 ## Styling
 
 The component is unstyled, but has CSS classes defined, including dynamic CSS classes for verification state.
-
-For more info see https://github.com/eqtylab/risc-zero-verifier

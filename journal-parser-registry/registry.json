@@ -48,7 +48,7 @@
         "name": "password-checker",
         "version": "0.12.0"
       },
-      "guestCodeId": "904d66114d1df69d1737e7bc484caed17160b845d155d6d6634ff74731268f36",
+      "guestCodeId": "949f5f6ee1220151a2c55e1b04cb7fae676d647e18aefa2b7a55acca67684c3f",
       "journalParser": {
         "protocol": "ipfs",
         "src": "bafybeih2ek3ycsssiwwv6kakjqta5t3go73nsztn7thbikn453xnpxsjpm/password_checker_journal_parser.js"
