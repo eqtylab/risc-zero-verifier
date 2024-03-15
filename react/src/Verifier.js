@@ -50,7 +50,7 @@ function Verifier({
   const [guestCodeId, setGuestCodeId] = useState("");
   const [receiptBinary, setReceiptBinary] = useState("");
   const [receiptJson, setReceiptJson] = useState("");
-  const [verificationResult, setVerificationResult] = useState(undefined);
+  const [verificationResult, setVerificationResult] = useState(null);
 
   useEffect(() => {
     onStatus(verificationResult);
@@ -175,7 +175,7 @@ function Verifier({
           isClearable
           options={guestCodeIdOptions()}
           onChange={(option) => setGuestCodeId(option ? option.value : "")}
-          isDisabled={verificationResult !== undefined}
+          isDisabled={verificationResult !== null}
           placeholder="Select or enter a guest code id..."
           formatCreateLabel={(inputValue) => `Use "${inputValue}"`}
         />
@@ -191,11 +191,11 @@ function Verifier({
           type="file"
           id={cssId("receipt-file-input")}
           onChange={handleFileChange}
-          disabled={verificationResult !== undefined}
+          disabled={verificationResult !== null}
         />
       </div>
       <div className={cssClass("verify-button-container")}>
-        {verificationResult === undefined ? (
+        {verificationResult === null ? (
           <button
             className={cssClass("verify-button")}
             onClick={() =>
@@ -209,7 +209,7 @@ function Verifier({
         ) : (
           <button
             className={cssClass("restart-button")}
-            onClick={() => setVerificationResult(undefined)}
+            onClick={() => setVerificationResult(null)}
           >
             {text.restartButtonLabel}
           </button>
