@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@eqty/risc-zero-verifier-react": "*",
+    "classnames": "^2.5.1",
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^6.10.0",
     "react": "^18.2.0",

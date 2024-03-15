@@ -1,20 +1,21 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import CreatableSelect from 'react-select/creatable';
-import JournalParser from './JournalParser.js';
+import React, { useEffect, useMemo, useState } from "react";
+import CreatableSelect from "react-select/creatable";
+import JournalParser from "./JournalParser.js";
 
-const DEFAULT_REGISTRY = 'https://risc0.verify.eqtylab.io/registry.json';
-const DEFAULT_IPFS_GATEWAY = 'https://w3s.link';
+const DEFAULT_REGISTRY = "https://risc0.verify.eqtylab.io/registry.json";
+const DEFAULT_IPFS_GATEWAY = "https://w3s.link";
 
 const cssPrefix = "risc-zero-verifier";
 
 export const defaultText = {
   verifyButtonLabel: "Verify",
   restartButtonLabel: "Restart",
-  instructions: "Upload a receipt file as JSON or binary (bincode format), or paste it as JSON into the form field.",
+  instructions:
+    "Upload a receipt file as JSON or binary (bincode format), or paste it as JSON into the form field.",
   fieldLabels: {
     guestCodeId: "Guest code id (hex value):",
     receiptFile: "Receipt (bincode format binary file or JSON):",
-    receiptJson: "Receipt JSON:"
+    receiptJson: "Receipt JSON:",
   },
   verificationResults: {
     verified: "Receipt verified.",
@@ -22,31 +23,38 @@ export const defaultText = {
   },
   errors: {
     guestCodeIdMissing: "Please enter a guest code id.",
-    receiptFileMissing: "Please provide a receipt file."
-  }
-}
+    receiptFileMissing: "Please provide a receipt file.",
+  },
+};
 
 function Verifier({
   text = defaultText,
   instanceNumber = 0,
   enableJournalParser = false,
   registryUrl = DEFAULT_REGISTRY,
-  ipfsGateway = DEFAULT_IPFS_GATEWAY
+  ipfsGateway = DEFAULT_IPFS_GATEWAY,
+  onStatus = (result) => {
+    console.log(result);
+  },
 }) {
   const [verifier, setVerifier] = useState(null);
 
   useEffect(() => {
     (async () => {
       const wasmPackage = await import("@eqty/risc-zero-verifier");
-      const verifier = await wasmPackage.default
+      const verifier = await wasmPackage.default;
       setVerifier(verifier);
     })();
   }, []);
 
-  const [guestCodeId, setGuestCodeId] = useState('');
-  const [receiptBinary, setReceiptBinary] = useState('');
-  const [receiptJson, setReceiptJson] = useState('');
+  const [guestCodeId, setGuestCodeId] = useState("");
+  const [receiptBinary, setReceiptBinary] = useState("");
+  const [receiptJson, setReceiptJson] = useState("");
   const [verificationResult, setVerificationResult] = useState(undefined);
+
+  useEffect(() => {
+    onStatus(verificationResult);
+  }, [verificationResult]);
 
   const receiptJournalBytes = useMemo(() => {
     try {
@@ -71,19 +79,16 @@ function Verifier({
     })();
   }, [registryUrl]);
 
-  const parsers = useMemo(() =>
-    registry ? registry.parsers : [], 
-    [registry]
-  );
+  const parsers = useMemo(() => (registry ? registry.parsers : []), [registry]);
 
   function verifyRiscZeroReceipt(guestCodeId, receiptJson) {
     if (!guestCodeId) {
       return {
         result: false,
-        error: text.errors.guestCodeIdMissing
+        error: text.errors.guestCodeIdMissing,
       };
     }
-    
+
     try {
       if (receiptBinary) {
         return verifier.verify_receipt_binary(guestCodeId, receiptBinary);
@@ -92,7 +97,7 @@ function Verifier({
       } else {
         return {
           result: false,
-          error: text.errors.receiptFileMissing
+          error: text.errors.receiptFileMissing,
         };
       }
     } catch (error) {
@@ -136,7 +141,9 @@ function Verifier({
   function guestCodeIdOptions() {
     return parsers.map((parser) => ({
       value: parser.guestCodeId,
-      label: `${shortenGuestCodeId(parser.guestCodeId)} (${parser.profile.name} ${parser.profile.version})`
+      label: `${shortenGuestCodeId(parser.guestCodeId)} (${
+        parser.profile.name
+      } ${parser.profile.version})`,
     }));
   }
 
@@ -153,39 +160,77 @@ function Verifier({
       <div className={cssClass("instructions-container")}>
         <p className={cssClass("instructions-text")}>{text.instructions}</p>
         {verifier && (
-          <p className={cssClass("instructions-version")}>Receipts must be generated with <code>risc0-zkvm</code> rust crate version <code>{verifier.get_risc0_version()}</code>.</p>
+          <p className={cssClass("instructions-version")}>
+            Receipts must be generated with <code>risc0-zkvm</code> rust crate
+            version <code>{verifier.get_risc0_version()}</code>.
+          </p>
         )}
       </div>
       <div className={cssClass("guest-code-id-container")}>
-        <label htmlFor={cssId("guest-code-input")}>{text.fieldLabels.guestCodeId}</label>
+        <label htmlFor={cssId("guest-code-input")}>
+          {text.fieldLabels.guestCodeId}
+        </label>
         <CreatableSelect
           id={cssId("guest-code-input")}
           isClearable
           options={guestCodeIdOptions()}
-          onChange={(option) => setGuestCodeId(option ? option.value : '')} 
+          onChange={(option) => setGuestCodeId(option ? option.value : "")}
           isDisabled={verificationResult !== undefined}
           placeholder="Select or enter a guest code id..."
           formatCreateLabel={(inputValue) => `Use "${inputValue}"`}
         />
       </div>
+      <div className={cssClass("verification-animation-container")}>
+        <div className={cssClass("verification-animation")} />
+      </div>
       <div className={cssClass("receipt-file-input-container")}>
-        <label htmlFor={cssId("receipt-file-input")}>{text.fieldLabels.receiptFile}</label> 
-        <input type="file" id={cssId("receipt-file-input")} onChange={handleFileChange} disabled={verificationResult !== undefined} />
+        <label htmlFor={cssId("receipt-file-input")}>
+          {text.fieldLabels.receiptFile}
+        </label>
+        <input
+          type="file"
+          id={cssId("receipt-file-input")}
+          onChange={handleFileChange}
+          disabled={verificationResult !== undefined}
+        />
       </div>
       <div className={cssClass("verify-button-container")}>
-        {verificationResult === undefined ? 
-          <button className={cssClass("verify-button")} onClick={() => setVerificationResult(verifyRiscZeroReceipt(guestCodeId, receiptJson))}>{text.verifyButtonLabel}</button>
-        :
-          <button className={cssClass("restart-button")} onClick={() => setVerificationResult(undefined)}>{text.restartButtonLabel}</button>
-        }
+        {verificationResult === undefined ? (
+          <button
+            className={cssClass("verify-button")}
+            onClick={() =>
+              setVerificationResult(
+                verifyRiscZeroReceipt(guestCodeId, receiptJson)
+              )
+            }
+          >
+            {text.verifyButtonLabel}
+          </button>
+        ) : (
+          <button
+            className={cssClass("restart-button")}
+            onClick={() => setVerificationResult(undefined)}
+          >
+            {text.restartButtonLabel}
+          </button>
+        )}
       </div>
 
       {verificationResult && (
-        <div className={[cssClass("receipt-verification-result"), cssClass(`receipt-verification-result-${verificationResult.verified === true ? "verified" : "unverified"}`)].join(' ')}>
+        <div
+          className={[
+            cssClass("receipt-verification-result"),
+            cssClass(
+              `receipt-verification-result-${
+                verificationResult.verified === true ? "verified" : "unverified"
+              }`
+            ),
+          ].join(" ")}
+        >
           <p className={cssClass("receipt-verification-result-message")}>
-            {
-              verificationResult.verified === true ? text.verificationResults.verified : `${text.verificationResults.notVerified} ${verificationResult.error}`
-            }
+            {verificationResult.verified === true
+              ? text.verificationResults.verified
+              : `${text.verificationResults.notVerified} ${verificationResult.error}`}
           </p>
           {verificationResult.verified === true && enableJournalParser && (
             <JournalParser
@@ -195,10 +240,8 @@ function Verifier({
               ipfsGateway={ipfsGateway}
             />
           )}
-
         </div>
       )}
-
     </div>
   );
 }
