@@ -22,11 +22,12 @@
   --failed-border: #ff6682;
   --failed-color: #99001c;
   --failed-bg: #ffccd5;
+  --failed-icon-bg: #99001c;
 
   --pending-color: #994000;
   --pending-bg: #ffe1cc;
 
-  --success-color: #178235;
+  --success-icon-bg: #178235;
   --success-bg: #ceffdc;
   --success-color: black;
   --success-border: #475569;
@@ -59,24 +60,6 @@ body {
 .all-verified .verified-bg {
   opacity: 1;
 }
-.inputbox {
-}
-
-/* VERIFYING STATE */
-.did-verification--pending .did-verification-badge--verifying {
-  color: #994000;
-  background: #ffe1cc;
-  display: inline-block;
-}
-/* SUCCESS STATE */
-.did-verification--success #txtDID {
-  border: 2px solid var(--success-bg);
-  border: 2px solid var(--success-border);
-}
-/* ERROR STATE */
-.did-verification--failed #txtDID {
-  border: 2px solid var(--failed-border);
-}
 
 .App {
   text-align: center;
@@ -84,7 +67,6 @@ body {
 }
 
 .risc-zero-journal-parser-journal-raw {
-  width: 75%;
   height: 80px;
 }
 
@@ -95,12 +77,13 @@ body {
 
 .risc-zero-verifier-main {
   font-family: Arial, sans-serif;
-  max-width: 600px;
+  max-width: 75%;
   margin: auto;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
   display: grid;
+  gap: 10px;
   grid-template-areas:
   /* i: intro */
   /* g: guest id */
@@ -109,8 +92,7 @@ body {
   /* b: button */
   /* v: verified result */
     "i i i"
-    "g g g"
-    "r r r"
+    "g a r"
     ". b ."
     "v v v";
 
@@ -128,8 +110,7 @@ body {
     cursor: pointer;
     flex-grow: 0;
     height: 33px;
-    margin-right: 20px;
-    margin-top: 10px;
+
     border: 0;
     border-radius: 0;
 
@@ -144,12 +125,16 @@ body {
     width: 100%;
     padding: 8px;
     border: 1px solid white;
+
     box-sizing: border-box;
     margin-bottom: 10px;
     cursor: pointer;
   }
   input:disabled {
     color: white;
+  }
+  textarea {
+    border: 2px solid var(--success-border);
   }
 }
 .risc-zero-verifier-instructions-container {
@@ -162,11 +147,37 @@ body {
     color: white;
   }
 }
+.risc-zero-verifier-verification-animation-container {
+  grid-area: a;
+  display: grid;
+  place-items: center;
+}
+.risc-zero-verifier-verification-animation {
+  width: 80px;
+  height: 80px;
+  border-radius: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.App.is-verified .risc-zero-verifier-verification-animation {
+  background-color: var(--success-icon-bg);
+  background-image: url('data:image/svg+xml,<svg  viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M47.8824 16.4516H52.1176C56.7958 16.4516 60.5882 20.2644 60.5882 24.9677V35H39.4118V24.9677C39.4118 20.2644 43.2042 16.4516 47.8824 16.4516ZM32 35V24.9677C32 16.149 39.1108 9 47.8824 9H52.1176C60.8892 9 68 16.149 68 24.9677V35H71C74.3137 35 77 37.6863 77 41V79C77 82.3137 74.3137 85 71 85H29C25.6863 85 23 82.3137 23 79V41C23 37.6863 25.6863 35 29 35H32ZM57 60C57 63.866 53.866 67 50 67C46.134 67 43 63.866 43 60C43 56.134 46.134 53 50 53C53.866 53 57 56.134 57 60Z" fill="white"/></svg>');
+}
+.App.is-unverified .risc-zero-verifier-verification-animation {
+  background-color: var(--failed-icon-bg);
+  background-image: url('data:image/svg+xml,<svg  viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M85 50C85 69.3301 69.3281 85 50 85C30.6719 85 15 69.3301 15 50C15 30.6699 30.6719 15 50 15C69.3281 15 85 30.6699 85 50ZM64.1406 73.0066C60.0312 75.5391 55.1875 77 50 77C35.0859 77 23 64.9116 23 50C23 44.8149 24.4609 39.9712 26.9922 35.8584L64.1406 73.0066ZM70.9297 67.063L32.9375 29.0715C37.5859 25.2761 43.5312 23 50 23C64.9141 23 77 35.0884 77 50C77 56.4719 74.7266 62.4121 70.9297 67.063Z" fill="white"/></svg>');
+}
+
 .risc-zero-verifier-receipt-file-input-container {
   grid-area: r;
 }
 .risc-zero-verifier-verify-button-container {
   grid-area: b;
+  display: grid;
+  place-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 .risc-zero-verifier-receipt-verification-result {
   grid-area: v;
@@ -180,8 +191,7 @@ body {
 
 .risc-zero-verifier-guest-code-id-container,
 .risc-zero-verifier-guest-code-id-select-container,
-.risc-zero-verifier-receipt-input-container,
-.risc-zero-verifier-verify-button-container {
+.risc-zero-verifier-receipt-input-container {
   margin-bottom: 40px;
 }
 
@@ -212,11 +222,11 @@ body {
 }
 
 .risc-zero-journal-parser-main {
-  font-family: Arial, sans-serif;
+  /* font-family: Arial, sans-serif; */
   max-width: 800px;
   margin: auto;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
 
   h2 {
     text-align: center;
@@ -228,8 +238,8 @@ body {
   }
   select {
     padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid white;
+    /* border-radius: 4px; */
     box-sizing: border-box;
     margin-bottom: 10px;
   }
@@ -270,9 +280,6 @@ body {
 .risc-zero-journal-parser-journal-raw {
   width: 100%;
   height: 200px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 10px;
   box-sizing: border-box;
   margin-bottom: 10px;
   background-color: #f9f9f9;
@@ -296,8 +303,8 @@ body {
 }
 
 .risc-zero-journal-parser-JSONTree {
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 2px solid var(--success-border);
+  /* border-radius: 4px; */
   padding: 10px;
   background-color: #f9f9f9;
 }
