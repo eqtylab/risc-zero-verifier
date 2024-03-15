@@ -3,18 +3,6 @@
     {
       "schemaVersion": "1",
       "profile": {
-        "name": "DELETE-ME",
-        "version": "0.0.0"
-      },
-      "guestCodeId": "",
-      "journalParser": {
-        "protocol": "",
-        "src": ""
-      }
-    },
-    {
-      "schemaVersion": "1",
-      "profile": {
         "name": "zk-hash-converter",
         "version": "0.0.0"
       },
