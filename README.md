@@ -12,8 +12,8 @@ There is a web app [hosted here](https://risc0.verify.eqtylab.io/). You can run 
 # npm packages
 There are two npm packages that you can use. They can be installed from npm, or to build them yourself see the requirements section.
 
-1. [Verifier React component](https://www.npmjs.com/package/@eqty/risc-zero-verifier-react)
-2. [Verifier with no UI](https://www.npmjs.com/package/@eqty/risc-zero-verifier) - built using [RISC Zero's rust verifier](https://docs.rs/risc0-zkvm/0.20.1/risc0_zkvm/struct.Receipt.html#method.verify) compiled to WASM.
+1. [Verifier React component](https://www.npmjs.com/package/@eqty/risc-zero-verifier-react). Usage docs [here](https://github.com/eqtylab/risc-zero-verifier/blob/main/react/README.md)
+2. [Verifier with no UI](https://www.npmjs.com/package/@eqty/risc-zero-verifier) - built using [RISC Zero's rust verifier](https://docs.rs/risc0-zkvm/0.20.1/risc0_zkvm/struct.Receipt.html#method.verify) compiled to WASM. Usage docs [here](https://github.com/eqtylab/risc-zero-verifier/blob/main/wasm/README.md)
 
 
 # Requirements
