@@ -118,6 +118,7 @@ function Verifier({
         try {
           receiptJson = JSON.parse(text);
           setReceiptJson(JSON.stringify(receiptJson));
+          setReceiptBinary(null);
         } catch (error) {
           // Try to convert from binary, expecting bincode format, if JSON parsing fails
           const fallbackReader = new FileReader();
