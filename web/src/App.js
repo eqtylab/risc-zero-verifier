@@ -3,12 +3,6 @@ import "./App.css";
 import { Verifier } from "@eqty/risc-zero-verifier-react";
 import cx from "classnames";
 
-const VERIFICATION = {
-  NONE: "none",
-  VERIFIED: "verified",
-  UNVERIFIED: "un-verified",
-};
-
 function App() {
   const [verificationResult, setVerificationResult] = useState(null);
   const onVerifierStatus = (result) => {
