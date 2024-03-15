@@ -1,6 +1,6 @@
 [package]
 name = "risc-zero-verifier"
-version = "0.1.4"
+version = "0.2.0"
 edition = "2021"
 description = "Verifier for RISC Zero receipts. See also risc-zero-verifier-react for a UI component."
 repository = "https://github.com/eqtylab/risc-zero-verifier"

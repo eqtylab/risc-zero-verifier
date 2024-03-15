@@ -1,6 +1,6 @@
 {
   "name": "@eqty/risc-zero-verifier-react",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "main": "dist/index.js",
   "license": "Apache-2.0",
   "description": "Verifier for RISC Zero receipts. See also risc-zero-verifier for a package with no UI component.",
