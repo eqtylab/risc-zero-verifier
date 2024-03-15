@@ -2,7 +2,7 @@
   "name": "risc-zero-verifier",
   "version": "0.0.1",
   "main": "index.js",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "scripts": {
     "start": "webpack serve --mode development",
     "build": "webpack --mode production",
