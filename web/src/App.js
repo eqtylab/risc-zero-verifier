@@ -10,20 +10,16 @@ const VERIFICATION = {
 };
 
 function App() {
-  const [isVerified, setIsVerified] = useState(VERIFICATION.NONE);
+  const [verificationResult, setVerificationResult] = useState(null);
   const onVerifierStatus = (result) => {
-    if (result) {
-      console.log("🚀 ~ onVerifierStatus ~ result:", result.verified);
-
-      setIsVerified(
-        result.verified ? VERIFICATION.VERIFIED : VERIFICATION.UNVERIFIED
-      );
-    }
+    console.log("🚀 ~ onVerifierStatus ~ result:", result);
+      setVerificationResult(result);
   };
 
   const classList = cx("App", {
-    "is-verified": isVerified === VERIFICATION.VERIFIED,
-    "is-unverified": isVerified === VERIFICATION.UNVERIFIED,
+    "is-verified": verificationResult && verificationResult.verified,
+    "is-unverified": verificationResult && !verificationResult.verified,
+    "": !verificationResult,
   });
 
   return (
