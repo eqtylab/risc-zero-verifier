@@ -30,7 +30,6 @@ jobs:
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: wasm/pkg/package.json
-          access: restricted
           dry-run: false
 
       - name: Publish Verifier React package to npm
@@ -38,7 +37,6 @@ jobs:
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: react/package.json
-          access: restricted
           dry-run: false
 
       - name: Upload GitHub pages artifact
