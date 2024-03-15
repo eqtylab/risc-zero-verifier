@@ -2,7 +2,7 @@
 
 This is a verifier for [RISC Zero zkVM](https://dev.risczero.com/api/zkvm/) execution receipts.
 
-It also has the ability to dynamically load custom parsers for the receipt journal data, see the [custom parsers](#custom-parsers) section.
+It also has the ability to dynamically load custom parsers for the receipt journal data, see the [journal parsers](#journal-parsers) section.
 
 
 # Hosted site
