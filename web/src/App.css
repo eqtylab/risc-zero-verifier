@@ -87,6 +87,9 @@ body {
 
   display: grid;
   gap: 10px;
+  grid-template-columns: 1fr auto 1fr;
+  /* justify-items: center; Center items horizontally */
+  align-items: center; /* Center items vertically */
   grid-template-areas:
   /* i: intro */
   /* g: guest id */
@@ -154,6 +157,7 @@ body {
   grid-area: a;
   display: grid;
   place-items: center;
+  padding: 20px;
 }
 .risc-zero-verifier-verification-animation {
   width: 80px;
@@ -192,7 +196,7 @@ body {
   padding: 0px 20px;
 }
 
-.risc-zero-verifier-guest-code-id-container,
+/* .risc-zero-verifier-guest-code-id-container, */
 .risc-zero-verifier-guest-code-id-select-container,
 .risc-zero-verifier-receipt-input-container {
   margin-bottom: 40px;
@@ -222,6 +226,7 @@ body {
 
 .risc-zero-verifier-receipt-verification-result-message {
   margin-bottom: 20px;
+  font-size: 30px;
 }
 
 .risc-zero-journal-parser-main {
