@@ -70,7 +70,7 @@ body {
 .footer {
   background-image: url("./assets/img/background.png");
   background-position: bottom;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   height: 250px;
 }
