@@ -11,7 +11,7 @@ export const defaultText = {
   verifyButtonLabel: "Verify",
   restartButtonLabel: "Restart",
   instructions:
-    "Upload a receipt file as JSON or binary (bincode format), or paste it as JSON into the form field.",
+    "Upload a receipt file as JSON or binary (bincode format).",
   fieldLabels: {
     guestCodeId: "Guest code id (hex value):",
     receiptFile: "Receipt (bincode format binary file or JSON):",
