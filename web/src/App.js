@@ -32,7 +32,7 @@ function App() {
         <h1>RISC Zero Verifier</h1>
         <p>
           This is a verifier for{" "}
-          <a href="https://dev.risczero.com/api/zkvm/">RISC Zero zkVM</a>{" "}
+          <a href="https://dev.risczero.com/api/zkvm/" target="_blank">RISC Zero zkVM</a>{" "}
           execution receipts.
         </p>
       </div>
@@ -45,8 +45,8 @@ function App() {
       <div className="info">
         <p>
           This verifier is developed by{" "}
-          <a href="https://www.eqtylab.io/">EQTY Lab</a> and the code is{" "}
-          <a href="https://github.com/eqtylab/risc-zero-verifier">
+          <a href="https://www.eqtylab.io/" target="_blank">EQTY Lab</a> and the code is{" "}
+          <a href="https://github.com/eqtylab/risc-zero-verifier" target="_blank">
             available on GitHub
           </a>
           .
