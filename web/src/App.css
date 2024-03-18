@@ -58,15 +58,7 @@ body {
   /* background: black; */
   /* min-height: 100dvh; */
 }
-.logo {
-  margin: 10px;
-  height: 50px;
 
-  background-image: url("./assets/img/logo.png");
-  background-position: left;
-  background-size: contain;
-  background-repeat: no-repeat;
-}
 .footer {
   background-image: url("./assets/img/background.png");
   background-position: bottom;

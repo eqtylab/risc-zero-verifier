@@ -18,7 +18,6 @@ function App() {
 
   return (
     <div className="AppContainer">
-      <div className="logo"></div>
       <div className={classList}>
         <div className="header">
           <h1>RISC Zero Verifier</h1>
